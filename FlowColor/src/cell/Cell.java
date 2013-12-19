@@ -67,4 +67,12 @@ public class Cell{
 			return this.componant.canHold(componant); 
 	}
 	
+        public boolean isFull(){
+            boolean full = (Nothing)this.componant == null;
+            if(this.bridge != null){
+                return this.bridge.containPipe() && full;
+            }
+            else
+                return full;
+        }
 }
