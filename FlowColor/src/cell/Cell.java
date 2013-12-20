@@ -32,9 +32,9 @@ public class Cell{
 		if(componant == null)
 			throw new IllegalArgumentException();
 		if(this.containBridge()){
-			if(this.bridge.canHold())
+			if(this.bridge.canHold(componant))
 				this.bridge.addPipe((Pipe) componant);
-			else if(this.bridge.canGoUnder())
+			else if(this.bridge.canGoUnder(componant))
 				this.componant = (Componant)componant;
 		}
 		else

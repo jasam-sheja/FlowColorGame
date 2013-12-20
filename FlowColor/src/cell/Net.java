@@ -8,6 +8,7 @@ package cell;
 
 import cell.componants.Bridge;
 import cell.componants.Componant;
+import cell.componants.Pipe;
 import java.awt.Color;
 
 /**
@@ -15,7 +16,7 @@ import java.awt.Color;
  * @author DigitalNet
  */
 public class Net {
-    private Cell[][] net;
+    private final Cell[][] net;
     /**
      * 
      * @param control \
@@ -44,17 +45,17 @@ public class Net {
     /**
      * @param componants
      * @param Colors
-     * @param Bridges
+     * @param bridges
      * @param BridgesColors 
      */
-    public Net(byte [][]componants,Color [][]Colors,byte [][]Bridges,Color [][]BridgesColors){
+    public Net(byte [][]componants,Color [][]Colors,byte [][]bridges,Color [][]BridgesColors){
         for(int i=0;i<componants.length-1;i++){
             if(componants[i].length != componants[i+1].length
 			|| Colors[i].length != Colors[i+1].length
-			|| Bridges[i].length != Bridges[i+1].length
+			|| bridges[i].length != bridges[i+1].length
 			|| BridgesColors[i].length != BridgesColors[i+1].length
 			|| componants[i].length != Colors[i].length
-			|| componants[i].length != Bridges[i].length
+			|| componants[i].length != bridges[i].length
 			|| componants[i].length != BridgesColors[i].length)
                 throw new IllegalArgumentException();
         }
@@ -63,7 +64,7 @@ public class Net {
         for(int i=0;i<componants.length;i++){
             for(int j=0;j<componants[i].length;i++){ 
                 net[i][j] = new Cell(new Componant(componants[i][j], Colors[i][j])
-                                     ,new Bridge(Bridges[i][j], BridgesColors[i][j]));
+                                     ,new Bridge(bridges[i][j], BridgesColors[i][j]));
             }
         }        
     }
@@ -75,8 +76,8 @@ public class Net {
     public Net(Componant [][]componants,Bridge [][]bridges){
         for(int i=0;i<componants.length-1;i++){
             if(componants[i].length != componants[i+1].length
-			|| Bridges[i].length != Bridges[i+1].length
-			|| componants[i].length != Bridges[i].length)
+			|| bridges[i].length != bridges[i+1].length
+			|| componants[i].length != bridges[i].length)
                 throw new IllegalArgumentException();
         }
 
