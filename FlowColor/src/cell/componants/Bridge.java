@@ -20,7 +20,8 @@ public final class Bridge extends Componant{
 	
 	public Bridge(byte type,Color color,Pipe pipe){
 		super(type,color);
-		this.addPipe(pipe);
+                if(pipe != null)
+                    this.addPipe(pipe);
 		if(type != Bridge.HORIZENTAL && type != Bridge.VERTICAL)
 			throw new IllegalArgumentException();
 	}

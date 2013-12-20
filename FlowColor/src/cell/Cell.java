@@ -7,6 +7,7 @@
 package cell;
 
 import cell.componants.*;
+import java.awt.Color;
 
 /**
  *
@@ -30,9 +31,12 @@ public class Cell{
 	public void addComponant(Removable componant){
 		if(componant == null)
 			throw new IllegalArgumentException();
-		if(!this.canHold(componant)) {
-                } else if(this.bridge.canHold(componant))
-			this.bridge.addPipe((Pipe)componant);
+		if(this.containBridge()){
+			if(this.bridge.canHold())
+				this.bridge.addPipe((Pipe) componant);
+			else if(this.bridge.canGoUnder())
+				this.componant = (Componant)componant;
+		}
 		else
 			this.componant = (Componant)componant;
 	}
@@ -43,7 +47,7 @@ public class Cell{
 		this.componant = new Nothing();
 	}
 	
-	public void removeOnBridge(){
+	public void removeFromBridge(){
 		this.bridge.removePipe();
 	}
 	
@@ -67,12 +71,22 @@ public class Cell{
 			return this.componant.canHold(componant); 
 	}
 	
-        public boolean isFull(){
-            boolean full = (Nothing)this.componant == null;
-            if(this.bridge != null){
-                return this.bridge.containPipe() && full;
-            }
-            else
-                return full;
+    public boolean isFull(){
+        boolean full = (Nothing)this.componant == null;
+        if(this.bridge != null){
+            return this.bridge.containPipe() && full;
         }
+        else
+            return full;
+        }       
+        
+    public Color getComponantColor(){
+        return this.componant.getColor();
+    }
+    public Color getBridgeColor(){
+        if(this.containBridge())
+            return this.bridge.getColor();
+        else
+            return Color.WHITE;
+    }
 }
