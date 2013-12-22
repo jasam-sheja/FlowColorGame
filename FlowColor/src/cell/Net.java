@@ -10,12 +10,13 @@ import cell.componants.Bridge;
 import cell.componants.Componant;
 import cell.componants.Pipe;
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author DigitalNet
  */
-public class Net {
+public class Net implements Serializable{
     private final Cell[][] net;
     /**
      * 
