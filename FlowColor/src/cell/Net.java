@@ -104,4 +104,8 @@ public class Net implements Serializable{
 		else
 			net[i][j].removeComponant();
 	}
+        
+        public int getDimenshin(){
+            return this.net.length;
+        }
 }

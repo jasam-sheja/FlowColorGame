@@ -16,4 +16,7 @@ public class Dot extends Componant{
 	public Dot(Color color){
 		super((byte)0,color);
 	}
+        public static boolean isDot(Componant c){
+            return (Dot)c != null;
+        } 
 }

@@ -26,10 +26,16 @@ public class Componant {
 		return this.color;
 	}
 	
-	public boolean equal(Componant c){
-		return this.id == c.id && this.color.equals(c.getColor());
+	public boolean equals(Componant c){
+		return this.equalsType(c) && equalsColor(c);
 	}
-	
+        public boolean equalsType(Componant c){
+		return this.id == c.id;
+	}
+	public boolean equalsColor(Componant c){
+            return this.color.equals(c.getColor());
+        }
+        
 	public boolean canHold(Componant componant){
 		return (this.id & componant.id) != 0;
 	}

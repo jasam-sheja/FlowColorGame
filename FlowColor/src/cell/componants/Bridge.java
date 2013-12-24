@@ -13,7 +13,7 @@ import java.awt.Color;
  * @author DigitalNet
  */
 public final class Bridge extends Componant{
-	public final static byte HORIZENTAL = 10;
+	public final static byte HORIZENTAL = 16;
 	public final static byte VERTICAL = 17;
 	
 	private Pipe pipe;
@@ -33,8 +33,14 @@ public final class Bridge extends Componant{
 	public boolean canGoUnder(Removable componant){
 		if((Nothing)componant != null)
 			return true;
-		return (this.getId()-((Componant)componant).getId())%2 != 0;
+		return ((this.getId() ^ ((Componant)componant).getId()) & 7) == 7;
 	}
+        @Override
+        public boolean canHold(Removable componant){
+            if((Nothing)componant != null)
+			return false;
+            return (this.getId() & 7) == (((Componant)componant).getId() & 7);
+        }
 	public boolean addPipe(Pipe pipe){
 		if(this.canHold((Removable)pipe)){
 			this.pipe = pipe;
@@ -44,6 +50,9 @@ public final class Bridge extends Componant{
 			return false;
 	}
 	
+        public Pipe getPipe(){
+            return this.pipe;
+        }
 	public void removePipe(){
 		this.pipe = null;
 	}
