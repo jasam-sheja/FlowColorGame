@@ -31,11 +31,12 @@ public class GameControllar {
         else
             throw new IllegalArgumentException();
         Color color = from.getColor(side);
-        removeLeaveLine(i, j);
 		Cell.Side entered;
 		if(!to.isCross()){
+			removeLeaveLine(i, j);
 			entered = to.getEntered();
 		}else{
+			removeLeaveLine(i,j,side == Cell.Side.LEFT||side == Cell.Side.RIGHT);
 			entered = to.getEntered(side == Cell.Side.LEFT||side == Cell.Side.RIGHT);
 		}
 		if(entered != null){
@@ -67,6 +68,8 @@ public class GameControllar {
                 case LEFT:
                     j--;
                     break;
+				default: //null
+					return;
             }         
             cell = this.maze.getCellAt(i, j);
             cell.remove(leaveSide.Opisite());
@@ -101,6 +104,8 @@ public class GameControllar {
             case LEFT:
                 j--;
                 break;
+			default: //null
+				return;
         }         
         cell = this.maze.getCellAt(i, j);
         cell.remove(leaveSide.Opisite());
