@@ -13,7 +13,33 @@ public class Cell {
         UP,
         DOWN,
         RIGHT,
-        LEFT;        
+        LEFT;       
+        public Side Opisite(){
+            switch(this){
+                case UP:
+                    return DOWN;
+                case DOWN:
+                    return UP;
+                case RIGHT:
+                    return LEFT;
+                case LEFT:
+                    return RIGHT;
+            }
+            throw new IllegalArgumentException("this should not be thrown");
+        }
+		public Side Next(){
+			switch(this){
+                case UP:
+                    return RIGHT;
+                case DOWN:
+                    return LEFT;
+                case RIGHT:
+                    return DONW;
+                case LEFT:
+                    return UP;
+            }
+            throw new IllegalArgumentException("this should not be thrown");
+		}
     };
     public enum State{
         EMPTY,
@@ -95,6 +121,7 @@ public class Cell {
             }
         } else{
             this.color = color;
+            this.crossColor = color;
             switch(side){
                 case UP:
                     if(down == State.ENTERD ||
@@ -217,6 +244,15 @@ public class Cell {
     
     public boolean isCross(){
        return isCross; 
+    }
+    public boolean isFull(){
+        return isFull;
+    }
+    public boolean isEmpty(){
+        return up == State.EMPTY && 
+                down == State.EMPTY && 
+                right == State.EMPTY && 
+                left == State.EMPTY ;                
     }
     
     public Color getColor(Side side){
