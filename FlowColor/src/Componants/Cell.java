@@ -34,7 +34,7 @@ public class Cell {
                 case DOWN:
                     return LEFT;
                 case RIGHT:
-                    return DONW;
+                    return DOWN;
                 case LEFT:
                     return UP;
             }

@@ -32,11 +32,11 @@ public class GameControllar {
             throw new IllegalArgumentException();
         Color color = from.getColor(side);
         removeLeaveLine(i, j);
-		Side entered
+		Cell.Side entered;
 		if(!to.isCross()){
 			entered = to.getEntered();
 		}else{
-			entered = to.getEntered(side);
+			entered = to.getEntered(side == Cell.Side.LEFT||side == Cell.Side.RIGHT);
 		}
 		if(entered != null){
 			if(to.getColor(side) != color){
