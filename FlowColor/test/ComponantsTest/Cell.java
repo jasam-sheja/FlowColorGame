@@ -238,10 +238,10 @@ public class Cell {
                         return;
                     } else if (hasDot()) {
                         if (!dot.next.isStart) {
-                            up = State.LEAVED;
+                            left = State.LEAVED;
                             dot.isStart = true;
                         } else {
-                            up = State.ENTERD;
+                            left = State.ENTERD;
                         }
                     } else if (down == State.ENTERD
                             || right == State.ENTERD
