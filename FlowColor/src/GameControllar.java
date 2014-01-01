@@ -45,7 +45,7 @@ public class GameControllar {
 			}
 		}   
         from.add(side, color);
-        to.add(side.Opisite(), color);        
+        to.add(side.Opposite(), color);        
     }
     
     public void removeLeaveLine(int i,int j){
@@ -72,7 +72,7 @@ public class GameControllar {
 					return;
             }         
             cell = this.maze.getCellAt(i, j);
-            cell.remove(leaveSide.Opisite());
+            cell.remove(leaveSide.Opposite());
             if(!cell.isCross())
                 removeLeaveLine(i, j);
             else
@@ -108,7 +108,7 @@ public class GameControllar {
 				return;
         }         
         cell = this.maze.getCellAt(i, j);
-        cell.remove(leaveSide.Opisite());
+        cell.remove(leaveSide.Opposite());
         if(!cell.isCross())
             removeLeaveLine(i, j);
         else

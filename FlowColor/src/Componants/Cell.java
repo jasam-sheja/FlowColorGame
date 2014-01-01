@@ -14,7 +14,7 @@ public class Cell {
         DOWN,
         RIGHT,
         LEFT;       
-        public Side Opisite(){
+        public Side Opposite(){
             switch(this){
                 case UP:
                     return DOWN;

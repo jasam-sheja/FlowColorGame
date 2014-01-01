@@ -15,7 +15,7 @@ public class Maze {
     public Maze(Dot[] dots, Bridge bridge, Hall hall, int lenght) {
         if (dots == null) {
             throw new IllegalArgumentException();
-        } else if (dots.length < 1) {
+        } else if ((dots.length / 2) != 0) {
             throw new IllegalArgumentException();
         }
         
@@ -25,12 +25,10 @@ public class Maze {
         int k = 0;
         for (int i = 0; i < lenght; i++) {
             for (int j = 0; j < lenght; j++) {
-                if (dots[k].x == i && dots[k].y == j) {
+                if ((k < dots.length)&&(dots[k].x == i && dots[k].y == j)) {
                     this.maze[i][j] = new Cell(false, false, dots[k]);
                     k++;
-                    if (k > dots.length) {
-                        k = 0;
-                    }
+                    
                 } else if (bridge != null && bridge.x == i && bridge.y == j) {
                     this.maze[i][j] = new Cell(false, true, null);
                 } else if (hall != null && hall.x == i && hall.y == j) {
