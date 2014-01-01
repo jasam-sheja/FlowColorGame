@@ -3,9 +3,9 @@ import ComponantsTest.GameControllar;
 import ComponantsTest.Cell;
 import ComponantsTest.Dot;
 import ComponantsTest.Level;
+import ComponantsTest.myImage;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,25 +23,7 @@ import javax.swing.*;
  */
 public class testJtable extends javax.swing.JFrame {
 
-    public enum PipeImage {
-
-        HRBlue(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/HRBlue.png"))),
-        HLBlue(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/HLBlue.png"))),
-        VUBlue(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/VUBlue.png"))),
-        VDBlue(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/VDBlue.png"))),
-        CDLBlue(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/CDLBlue.png"))),
-        BlueDot(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/BlueDot.png"))),
-        NULL(Toolkit.getDefaultToolkit().getImage(testJtable.class.getClass().getResource("/pipes/NULL.png")));
-        private final Image image;
-
-        private PipeImage(Image image) {
-            this.image = image;
-        }
-
-        public Image Image() {
-            return image;
-        }
-    }
+    
 
     /**
      * Creates new form testJtable
@@ -77,6 +59,8 @@ public class testJtable extends javax.swing.JFrame {
         jButton31 = new javax.swing.JButton();
         jButton30 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -273,12 +257,28 @@ public class testJtable extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pipes/HBlue.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         jMenu1.setText("File");
 
@@ -339,46 +339,55 @@ public class testJtable extends javax.swing.JFrame {
                             .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(29, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton00, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton01, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton02, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton03, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton22, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton32, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton31, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton30, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton00, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton01, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton02, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton03, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton22, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton32, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton31, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton30, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void initMyComponents() {
-        Level level = new Level(new Dot[]{new Dot(Color.BLUE, 0, 0), new Dot(Color.BLUE, 3, 3)}, null, null, 4);
+        Level level = new Level(new Dot[]{new Dot(Color.BLUE, 0, 0), new Dot(Color.BLUE, 3, 3)}, null, null, 4,1);
         gc = new GameControllar(level);
         buttons = new JButton[4][4];
         buttons[0][0] = jButton00;
@@ -400,7 +409,7 @@ public class testJtable extends javax.swing.JFrame {
 
         for (JButton[] btns : buttons) {
             for (JButton btn : btns) {
-                btn.setIcon(new ImageIcon(PipeImage.NULL.Image()));
+                btn.setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
             }
         }
 
@@ -421,15 +430,27 @@ public class testJtable extends javax.swing.JFrame {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
                         Cell.State state = (Cell.State) evt.getNewValue();
+                        Cell thecell = (Cell)evt.getOldValue();
                         switch (evt.getPropertyName()) {
                             case "UP":
+//                                if (state == Cell.State.CROSS_ENTERD
+//                                        || state == Cell.State.ENTERD){
+//                                    if(!thecell.isCross()){
+//                                        if(!thecell.hasDot())
+//                                            buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VUBlue.Image()));
+//                                        else
+//                                            //buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VUBlue.Image()));
+//                                    }
+//                                }
+                                    
                                 if (state == Cell.State.CROSS_ENTERD
                                         || state == Cell.State.ENTERD
                                         || state == Cell.State.CROSS_LEAVED
                                         || state == Cell.State.LEAVED) {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.VUBlue.Image()));
+                                    
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VUBlue.Image()));
                                 } else {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.NULL.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
                                 }
                                 break;
                             case "DOWN":
@@ -437,9 +458,9 @@ public class testJtable extends javax.swing.JFrame {
                                         || state == Cell.State.ENTERD
                                         || state == Cell.State.CROSS_LEAVED
                                         || state == Cell.State.LEAVED) {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.VDBlue.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VDBlue.Image()));
                                 } else {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.NULL.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
                                 }
                                 break;
                             case "RIGHT":
@@ -447,9 +468,9 @@ public class testJtable extends javax.swing.JFrame {
                                         || state == Cell.State.ENTERD
                                         || state == Cell.State.CROSS_LEAVED
                                         || state == Cell.State.LEAVED) {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.HRBlue.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.HRBlue.Image()));
                                 } else {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.NULL.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
                                 }
                                 break;
                             case "LEFT":
@@ -457,9 +478,9 @@ public class testJtable extends javax.swing.JFrame {
                                         || state == Cell.State.ENTERD
                                         || state == Cell.State.CROSS_LEAVED
                                         || state == Cell.State.LEAVED) {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.HLBlue.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.HLBlue.Image()));
                                 } else {
-                                    buttons[fi][fj].setIcon(new ImageIcon(PipeImage.NULL.Image()));
+                                    buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
                                 }
                                 break;
                         }
@@ -467,6 +488,7 @@ public class testJtable extends javax.swing.JFrame {
                 }, i, j);
             }
         }
+        this.BlueDot = new myImage(myImage.PipeImage.BlueDot);
     }
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
@@ -517,7 +539,12 @@ public class testJtable extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10MouseExited
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JOptionPane.showMessageDialog(this, Cell.Side.DOWN.toString());
+//        Graphics g = jPanel1.getGraphics();
+//        g.drawImage(PipeImage.BlueDot.Image(), 10, 10, jPanel1);
+        jPanel1.add(BlueDot);
+        jLabel1.add(BlueDot);
+        jPanel1.repaint();
+        jLabel1.repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton01ActionPerformed
@@ -577,6 +604,17 @@ public class testJtable extends javax.swing.JFrame {
         }           
     }//GEN-LAST:event_jButton11MouseExited
 
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+//        jLabel1.remove(BlueDot);     
+        for (Component comp : jLabel1.getComponents()) {
+            if(comp instanceof myImage){
+                if(comp.equals(new myImage(myImage.PipeImage.BlueDot)))
+                    jLabel1.remove(comp);
+            }
+        }
+        jLabel1.repaint();
+    }//GEN-LAST:event_jLabel1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -632,12 +670,15 @@ public class testJtable extends javax.swing.JFrame {
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
     private javax.swing.JButton jButton33;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
     private GameControllar gc;
     JButton[][] buttons;
     Cell[][] cells;
+    myImage BlueDot;
 }

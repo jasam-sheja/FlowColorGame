@@ -17,7 +17,7 @@ public class Cell {
         RIGHT,
         LEFT;
 
-        public Side Opisite() {
+        public Side Opposite() {
             switch (this) {
                 case UP:
                     return DOWN;
@@ -87,6 +87,8 @@ public class Cell {
     public Cell(boolean isHall, boolean isCross, Dot dot, boolean isUpBlocked, boolean isDownBlocked, boolean isRightBlocked, boolean isLeftBlocked) {
         this.isCross = isCross;
         this.dot = dot;
+        if(isCross && dot!=null)
+            throw new IllegalArgumentException();
         if (isHall) {
             this.up = State.BLOCKED;
             this.down = State.BLOCKED;
@@ -103,14 +105,16 @@ public class Cell {
     public void add(Side side, Color color) {
         if (side == null) {
             return;
-        }
+        } 
         State oldValue = up;
         State newValue = up;
         if (isCross) {
             switch (side) {
                 case UP:
                     oldValue = up;
-                    if (down == State.CROSS_ENTERD) {
+                    if(up == State.BLOCKED)
+                        return ;
+                    else if (down == State.CROSS_ENTERD) {
                         up = State.CROSS_LEAVED;
                     } else {
                         up = State.CROSS_ENTERD;
@@ -120,7 +124,9 @@ public class Cell {
                     break;
                 case DOWN:
                     oldValue = down;
-                    if (up == State.CROSS_ENTERD) {
+                    if(down == State.BLOCKED)
+                        return ;
+                    else if (up == State.CROSS_ENTERD) {
                         down = State.CROSS_LEAVED;
                     } else {
                         down = State.CROSS_ENTERD;
@@ -130,7 +136,9 @@ public class Cell {
                     break;
                 case RIGHT:
                     oldValue = right;
-                    if (left == State.CROSS_ENTERD) {
+                    if(right == State.BLOCKED)
+                        return ;
+                    else if (left == State.CROSS_ENTERD) {
                         right = State.CROSS_LEAVED;
                     } else {
                         right = State.CROSS_ENTERD;
@@ -140,7 +148,9 @@ public class Cell {
                     break;
                 case LEFT:
                     oldValue = left;
-                    if (right == State.CROSS_ENTERD) {
+                    if(left == State.BLOCKED)
+                        return ;
+                    else if (right == State.CROSS_ENTERD) {
                         left = State.CROSS_LEAVED;
                     } else {
                         left = State.CROSS_ENTERD;
@@ -155,7 +165,15 @@ public class Cell {
             switch (side) {
                 case UP:
                     oldValue = up;
-                    if (down == State.ENTERD
+                    if(up == State.BLOCKED)
+                        return ;
+                    else if(hasDot()){
+                        if(isEmpty())
+                            up = State.LEAVED;
+                        else
+                            up = State.ENTERD;
+                    }
+                    else if (down == State.ENTERD
                             || right == State.ENTERD
                             || left == State.ENTERD) {
                         up = State.LEAVED;
@@ -166,7 +184,14 @@ public class Cell {
                     break;
                 case DOWN:
                     oldValue = down;
-                    if (up == State.ENTERD
+                    if(down == State.BLOCKED)
+                        return ;
+                    else if(hasDot()){
+                        if(isEmpty())
+                            down = State.LEAVED;
+                        else
+                            down = State.ENTERD;
+                    }else if (up == State.ENTERD
                             || right == State.ENTERD
                             || left == State.ENTERD) {
                         down = State.LEAVED;
@@ -177,7 +202,14 @@ public class Cell {
                     break;
                 case RIGHT:
                     oldValue = right;
-                    if (down == State.ENTERD
+                    if(right == State.BLOCKED)
+                        return ;
+                    else if(hasDot()){
+                        if(isEmpty())
+                            right = State.LEAVED;
+                        else
+                            left = State.ENTERD;
+                    }else if (down == State.ENTERD
                             || up == State.ENTERD
                             || left == State.ENTERD) {
                         right = State.LEAVED;
@@ -188,7 +220,14 @@ public class Cell {
                     break;
                 case LEFT:
                     oldValue = left;
-                    if (down == State.ENTERD
+                    if(left == State.BLOCKED)
+                        return ;
+                    else if(hasDot()){
+                        if(isEmpty())
+                            left = State.LEAVED;
+                        else
+                            left = State.ENTERD;
+                    }else if (down == State.ENTERD
                             || right == State.ENTERD
                             || up == State.ENTERD) {
                         left = State.LEAVED;
@@ -199,7 +238,8 @@ public class Cell {
                     break;
             }
         }
-        changeSupport.firePropertyChange(side.toString(), oldValue, newValue);
+//        changeSupport.firePropertyChange(side.toString(), oldValue, newValue);
+        changeSupport.firePropertyChange(side.toString(), this, newValue);
     }
 
     public void remove(Side side) {
@@ -238,7 +278,8 @@ public class Cell {
                 newValue = left;
                 break;
         }
-        changeSupport.firePropertyChange(side.toString(), oldValue, newValue);
+//        changeSupport.firePropertyChange(side.toString(), oldValue, newValue);
+        changeSupport.firePropertyChange(side.toString(), this, newValue);
     }
 
     public Side getEntered() {
@@ -320,10 +361,10 @@ public class Cell {
     }
 
     public boolean isEmpty() {
-        return up == State.EMPTY
-                && down == State.EMPTY
-                && right == State.EMPTY
-                && left == State.EMPTY;
+        return (up == State.EMPTY || up == State.BLOCKED)
+                && (down == State.EMPTY || down == State.BLOCKED)
+                && (right == State.EMPTY || right == State.BLOCKED)
+                && (left == State.EMPTY || left == State.BLOCKED);
     }
 
     public Color getColor(Side side) {
@@ -349,5 +390,9 @@ public class Cell {
             changeSupport = new PropertyChangeSupport(this);
         }
         changeSupport.addPropertyChangeListener(listener);
+    }
+    
+    public boolean hasDot(){
+        return this.dot!=null;
     }
 }

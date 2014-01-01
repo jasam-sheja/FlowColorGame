@@ -25,13 +25,13 @@ class DotCompByPosition implements Comparator<Dot>{
 
     @Override
     public int compare(Dot o1, Dot o2) {
-        if(o1.x < o2.x)
+        if(o1.x > o2.x)
             return 1;
-        else if(o1.x > o2.x)
+        else if(o1.x < o2.x)
             return -1;
-        else if(o1.y < o2.y)
-            return 1;
         else if(o1.y > o2.y)
+            return 1;
+        else if(o1.y < o2.y)
             return -1;
         else
             return 0;            

@@ -18,9 +18,9 @@ public class GameControllar {
     public void add(int i,int j,int i0,int j0){
         Cell from = this.maze.getCellAt(i0, j0);
         Cell to = this.maze.getCellAt(i, j);
-        if(from.isEmpty())
+        if(from.isEmpty() && from.dot==null)
             return ;
-        Cell.Side side;
+        Cell.Side side;//for the cell to
         if(i==i0+1)
             side = Cell.Side.UP;
         else if(i==i0-1)
@@ -45,8 +45,8 @@ public class GameControllar {
 				to.remove(entered);
 			}
 		}   
-        from.add(side, color);
-        to.add(side.Opisite(), color);        
+        from.add(side.Opposite(), color);
+        to.add(side, color);        
     }
     
     public void removeLeaveLine(int i,int j){
@@ -73,7 +73,7 @@ public class GameControllar {
                     break;
             }         
             cell = this.maze.getCellAt(i, j);
-            cell.remove(leaveSide.Opisite());
+            cell.remove(leaveSide.Opposite());
             if(!cell.isCross())
                 removeLeaveLine(i, j);
             else
@@ -109,7 +109,7 @@ public class GameControllar {
                 break;
         }         
         cell = this.maze.getCellAt(i, j);
-        cell.remove(leaveSide.Opisite());
+        cell.remove(leaveSide.Opposite());
         if(!cell.isCross())
             removeLeaveLine(i, j);
         else
