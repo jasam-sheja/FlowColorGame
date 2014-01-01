@@ -29,5 +29,20 @@ public class Writer {
         }
         
     }
+    public static void gameWriter (Maze maze , String fileName){
+    
+        ObjectOutputStream writeObject  ;
+        try{
+            writeObject = new ObjectOutputStream(new FileOutputStream(fileName) ) ;
+            writeObject.writeObject(maze);
+            writeObject.flush();
+            writeObject.close();
+        
+        }
+        catch (IOException ex){
+            System.err.println(ex.getMessage());
+        }
+        
+    }
     
 }

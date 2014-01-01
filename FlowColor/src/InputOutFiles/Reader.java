@@ -44,5 +44,31 @@ public class Reader {
         
         
     }
+    public static Maze gameReader (int gameNumber, String fileName){
+        Maze maze ;
+        ObjectInputStream readObject ;
+        try{        
+         readObject = new ObjectInputStream(new FileInputStream(fileName)) ;
+        while (true){
+            maze = (Maze) readObject.readObject() ;
+            if ((maze == null)||(maze.getGameNumber()== gameNumber))
+                break ;
+            
+        }
+        return maze ;
+        
+        }
+        catch (ClassNotFoundException ex){
+            System.err.println(ex.getMessage());
+            return null ;
+        }
+        catch(IOException ex){
+            System.err.println(ex.getMessage());
+            return null ;
+        }
+        
+        
+        
+    }
     
 }

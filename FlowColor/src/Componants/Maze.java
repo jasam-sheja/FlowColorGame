@@ -8,11 +8,19 @@ import java.util.Arrays;
  * @author jasam + wissam
  */
 public class Maze {
-
+    
+    private static  int counter = 0 ;
     private Cell[][] maze;
     private Dot[] dots;
+    private int gameNumber ;
+
+    public int getGameNumber() {
+        return gameNumber;
+    }
 
     public Maze(Dot[] dots, Bridge bridge, Hall hall, int lenght) {
+        counter ++ ; 
+        this.gameNumber = counter ;
         if (dots == null) {
             throw new IllegalArgumentException();
         } else if ((dots.length / 2) != 0) {
