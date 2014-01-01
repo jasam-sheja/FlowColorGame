@@ -144,6 +144,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton12MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton12MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -168,6 +174,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton21.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton21MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton21MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -177,6 +189,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton20MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton20MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -186,6 +204,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton22.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton22MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton22MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -195,6 +219,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton03.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton03MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton03MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -204,6 +234,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton13MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton13MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -213,6 +249,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton23MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton23MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -222,6 +264,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton33.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton33MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton33MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -231,6 +279,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton32.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton32MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton32MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -240,6 +294,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton31.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton31MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton31MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -249,6 +309,12 @@ public class testJtable extends javax.swing.JFrame {
         });
 
         jButton30.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton30MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton30MouseExited(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton23MousePressed(evt);
             }
@@ -387,7 +453,10 @@ public class testJtable extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void initMyComponents() {
-        Level level = new Level(new Dot[]{new Dot(Color.BLUE, 0, 0), new Dot(Color.BLUE, 3, 3)}, null, null, 4,1);
+        Dot[] dots = new Dot[2];
+        dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 3, 3);
+        dots[1] = dots[0].next;
+        Level level = new Level(dots, null, null, 4,1);
         gc = new GameControllar(level);
         buttons = new JButton[4][4];
         buttons[0][0] = jButton00;
@@ -614,6 +683,171 @@ public class testJtable extends javax.swing.JFrame {
         }
         jLabel1.repaint();
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void jButton03MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton03MouseEntered
+        if (ismousePressed) {
+            i=0;
+            j=3;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton03MouseEntered
+
+    private void jButton03MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton03MouseExited
+        if (ismousePressed) {
+             i0=0;
+             j0=3;
+        }
+    }//GEN-LAST:event_jButton03MouseExited
+
+    private void jButton12MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton12MouseEntered
+        if (ismousePressed) {
+            i=1;
+            j=2;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton12MouseEntered
+
+    private void jButton12MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton12MouseExited
+        if (ismousePressed) {
+             i0=1;
+             j0=2;
+        }
+    }//GEN-LAST:event_jButton12MouseExited
+
+    private void jButton13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton13MouseEntered
+        if (ismousePressed) {
+            i=1;
+            j=3;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton13MouseEntered
+
+    private void jButton13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton13MouseExited
+        if (ismousePressed) {
+             i0=1;
+             j0=3;
+        }
+    }//GEN-LAST:event_jButton13MouseExited
+
+    private void jButton20MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton20MouseEntered
+        if (ismousePressed) {
+            i=2;
+            j=0;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton20MouseEntered
+
+    private void jButton20MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton20MouseExited
+        if (ismousePressed) {
+             i0=2;
+             j0=0;
+        }
+    }//GEN-LAST:event_jButton20MouseExited
+
+    private void jButton21MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton21MouseEntered
+        if (ismousePressed) {
+            i=2;
+            j=1;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton21MouseEntered
+
+    private void jButton21MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton21MouseExited
+        if (ismousePressed) {
+             i0=2;
+             j0=1;
+        }
+    }//GEN-LAST:event_jButton21MouseExited
+
+    private void jButton22MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton22MouseEntered
+        if (ismousePressed) {
+            i=2;
+            j=2;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton22MouseEntered
+
+    private void jButton22MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton22MouseExited
+        if (ismousePressed) {
+             i0=2;
+             j0=2;
+        }
+    }//GEN-LAST:event_jButton22MouseExited
+
+    private void jButton23MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton23MouseEntered
+        if (ismousePressed) {
+            i=2;
+            j=3;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton23MouseEntered
+
+    private void jButton23MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton23MouseExited
+        if (ismousePressed) {
+             i0=2;
+             j0=3;
+        }
+    }//GEN-LAST:event_jButton23MouseExited
+
+    private void jButton30MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton30MouseEntered
+        if (ismousePressed) {
+            i=3;
+            j=0;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton30MouseEntered
+
+    private void jButton30MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton30MouseExited
+        if (ismousePressed) {
+             i0=3;
+             j0=0;
+        }
+    }//GEN-LAST:event_jButton30MouseExited
+
+    private void jButton31MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton31MouseEntered
+        if (ismousePressed) {
+            i=3;
+            j=1;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton31MouseEntered
+
+    private void jButton31MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton31MouseExited
+        if (ismousePressed) {
+             i0=3;
+             j0=1;
+        }
+    }//GEN-LAST:event_jButton31MouseExited
+
+    private void jButton32MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton32MouseEntered
+        if (ismousePressed) {
+            i=3;
+            j=2;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton32MouseEntered
+
+    private void jButton32MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton32MouseExited
+        if (ismousePressed) {
+             i0=3;
+             j0=2;
+        }
+    }//GEN-LAST:event_jButton32MouseExited
+
+    private void jButton33MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton33MouseEntered
+        if (ismousePressed) {
+            i=3;
+            j=3;
+            gc.add(i, j, i0, j0);
+        }
+    }//GEN-LAST:event_jButton33MouseEntered
+
+    private void jButton33MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton33MouseExited
+        if (ismousePressed) {
+             i0=3;
+             j0=3;
+        }
+    }//GEN-LAST:event_jButton33MouseExited
 
     /**
      * @param args the command line arguments
