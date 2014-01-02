@@ -46,13 +46,14 @@ public class GameControllar {
         if ((from.hasDot() && from.getDot().next.isStart)
                 || (from.isEmpty() && !from.hasDot())
                 || from.isFull()) {
-            return false;
+            //return false;
+            removeLeaveLine(from.getDot().next.x, from.getDot().next.y);
         }
 
         Cell to = this.maze.getCellAt(i, j);
         if (to.isHall()) {
             return false;
-        }
+        } 
 
         Color color = from.getColor(side);
         if (color == null) {
@@ -86,8 +87,6 @@ public class GameControllar {
 
         from.add(side.Opposite(), color);
         if (!to.add(side, color)) {
-            System.out.println("connot add " + side + " at " + i + "|" + j);
-
             Cell.Side entered;
             if (!to.isCross()) {
                 removeLeaveLine(i, j);
@@ -106,6 +105,15 @@ public class GameControllar {
         return true;
     }
 
+    public void clearPath(int i,int j){
+        Cell theCell = maze.getCellAt(i, j);
+        if(theCell.isCross() || theCell.isHall() || (theCell.isEmpty()&& !theCell.hasDot()))
+            return;
+        if(theCell.hasDot()){
+            removeLeaveLine(theCell.getDot().next.x, theCell.getDot().next.y);
+        }
+        removeLeaveLine(i, j);
+    }
     public void removeLeaveLine(int i, int j) {
         Cell cell = this.maze.getCellAt(i, j);
         if (cell.isEmpty()) {

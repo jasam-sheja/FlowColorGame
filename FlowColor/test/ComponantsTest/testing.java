@@ -67,7 +67,7 @@ public class testing extends javax.swing.JFrame {
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(Color.DARK_GRAY);
         add(centerPanel, BorderLayout.CENTER);
-        GridLayout gridLayout = new GridLayout(4, 4, 0, 0);
+        GridLayout gridLayout = new GridLayout(mybuttons.length, mybuttons.length, 0, 0);
         centerPanel.setLayout(gridLayout);
         for (CellPanel[] buttons : mybuttons) {
             for (CellPanel button : buttons) {
@@ -83,7 +83,7 @@ public class testing extends javax.swing.JFrame {
         dots[1] = dots[0].next;
         dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
         dots[3] = dots[2].next;
-        level = new Level(dots, null, null, 4, 1);
+        level = new Level(dots, null, null, 5, 1);
         gc = new GameControllar(level);
 
         for (int i = 0; i < gc.CellsPerRow(); i++) {
@@ -132,11 +132,11 @@ public class testing extends javax.swing.JFrame {
             }
         }
 
-        mybuttons = new CellPanel[4][4];
+        mybuttons = new CellPanel[level.getLength()][level.getLength()];
         int k = 0;
-        for (int l = 0; l < 4; l++) {
+        for (int l = 0; l < mybuttons.length; l++) {
             final int fi = l;
-            for (int m = 0; m < 4; m++) {
+            for (int m = 0; m < mybuttons.length; m++) {
                 final int fj = m;
                 if ((k < dots.length) && (dots[k].x == l && dots[k].y == m)) {
                     mybuttons[l][m] = new CellPanel(l, m, true, false, false, dots[k].color);
@@ -164,9 +164,7 @@ public class testing extends javax.swing.JFrame {
                                     }
                                 }
                             }
-                        } else if (mybuttons[fi][fj].getRowIndex() == i0 && mybuttons[fi][fj].getColomunIndex() == j0) {
-                            ismousePressed = true;
-                        }
+                        } 
                     }
 
                     @Override
@@ -185,13 +183,15 @@ public class testing extends javax.swing.JFrame {
                             j0 = mybuttons[fi][fj].getColomunIndex();
                             canAdd = true;
                             color = mybuttons[fi][fj].getColor(true);
-                            gc.removeLeaveLine(i0, j0);
+                            gc.clearPath(i0, j0);                            
                         }
                     }
 
                     @Override
                     public void mouseReleased(java.awt.event.MouseEvent evt) {
                         if (evt.getButton() == MouseEvent.BUTTON1) {
+                            i0 = -10;
+                            j0 = -10;
                             ismousePressed = false;
                             canAdd = false;
                             color = null;
@@ -233,7 +233,7 @@ public class testing extends javax.swing.JFrame {
         });
     }
 
-    private int i, j, i0, j0;
+    private int i, j, i0=-10, j0=-10;
     private boolean ismousePressed;
     private boolean canAdd;
     private Color color;
