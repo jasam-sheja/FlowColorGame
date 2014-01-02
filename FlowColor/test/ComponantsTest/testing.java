@@ -5,12 +5,10 @@ package ComponantsTest;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author DigitalNet
  */
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -18,7 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.ImageIcon;
 import javax.swing.*;
 
 /*
@@ -32,14 +29,12 @@ import javax.swing.*;
  */
 public class testing extends javax.swing.JFrame {
 
-    
-
     /**
      * Creates new form testJtable
      */
     public testing() {
         initMyComponents();
-        initComponents();       
+        initComponents();
     }
 
     /**
@@ -54,7 +49,7 @@ public class testing extends javax.swing.JFrame {
         setTitle("Calculator");
         setSize(300, 320);
         setLocationRelativeTo(null);
-        
+
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -73,24 +68,25 @@ public class testing extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
-        
+
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(Color.DARK_GRAY);
         add(centerPanel, BorderLayout.CENTER);
         GridLayout gridLayout = new GridLayout(4, 4, 1, 1);
         centerPanel.setLayout(gridLayout);
-        for (myButton[] buttons : mybuttons) {
-            for (myButton button : buttons) {
+        for (CellPanel[] buttons : mybuttons) {
+            for (CellPanel button : buttons) {
                 centerPanel.add(button);
             }
         }
 
     }// </editor-fold>                        
+
     private void initMyComponents() {
         Dot[] dots = new Dot[2];
         dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 3, 3);
         dots[1] = dots[0].next;
-        Level level = new Level(dots, null, null, 4,1);
+        level = new Level(dots, null, null, 4, 1);
         gc = new GameControllar(level);
 
         for (int i = 0; i < gc.CellsPerRow(); i++) {
@@ -102,108 +98,102 @@ public class testing extends javax.swing.JFrame {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
                         Cell.State state = (Cell.State) evt.getNewValue();
-                        Cell thecell = (Cell)evt.getOldValue();
+                        Cell thecell = (Cell) evt.getOldValue();
+                        boolean hasPipe = state == Cell.State.CROSS_ENTERD
+                                        || state == Cell.State.ENTERD
+                                        || state == Cell.State.CROSS_LEAVED
+                                        || state == Cell.State.LEAVED;
+                        Color color = null;
                         switch (evt.getPropertyName()) {
                             case "UP":
-//                                if (state == Cell.State.CROSS_ENTERD
-//                                        || state == Cell.State.ENTERD){
-//                                    if(!thecell.isCross()){
-//                                        if(!thecell.hasDot())
-//                                            buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VUBlue.Image()));
-//                                        else
-//                                            //buttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VUBlue.Image()));
-//                                    }
-//                                }
-                                    
-                                if (state == Cell.State.CROSS_ENTERD
-                                        || state == Cell.State.ENTERD
-                                        || state == Cell.State.CROSS_LEAVED
-                                        || state == Cell.State.LEAVED) {
-                                    
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VUBlue.Image()));
-                                } else {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
+                                if(hasPipe){
+                                    color = thecell.getColor(Cell.Side.UP);
                                 }
+                                mybuttons[fi][fj].setDrawUp(hasPipe, color);
                                 break;
                             case "DOWN":
-                                if (state == Cell.State.CROSS_ENTERD
-                                        || state == Cell.State.ENTERD
-                                        || state == Cell.State.CROSS_LEAVED
-                                        || state == Cell.State.LEAVED) {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.VDBlue.Image()));
-                                } else {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
+                                if(hasPipe){
+                                    color = thecell.getColor(Cell.Side.DOWN);
                                 }
+                                mybuttons[fi][fj].setDrawDown(hasPipe, color);
                                 break;
                             case "RIGHT":
-                                if (state == Cell.State.CROSS_ENTERD
-                                        || state == Cell.State.ENTERD
-                                        || state == Cell.State.CROSS_LEAVED
-                                        || state == Cell.State.LEAVED) {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.HRBlue.Image()));
-                                } else {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
+                                if(hasPipe){
+                                    color = thecell.getColor(Cell.Side.RIGHT);
                                 }
+                                mybuttons[fi][fj].setDrawRight(hasPipe, color);
                                 break;
                             case "LEFT":
-                                if (state == Cell.State.CROSS_ENTERD
-                                        || state == Cell.State.ENTERD
-                                        || state == Cell.State.CROSS_LEAVED
-                                        || state == Cell.State.LEAVED) {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.HLBlue.Image()));
-                                } else {
-                                    mybuttons[fi][fj].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
+                                if(hasPipe){
+                                    color = thecell.getColor(Cell.Side.LEFT);
                                 }
+                                mybuttons[fi][fj].setDrawLeft(hasPipe, color);
                                 break;
                         }
                     }
                 }, i, j);
             }
         }
-        
-        mybuttons = new myButton[4][4];
-        for (int i = 0; i < 4; i++) {
-            final int fi = i;
-            for (int j = 0; j < 4; j++) {
-                final int fj = j;
-                mybuttons[i][j] = new myButton(i, j);
-                mybuttons[i][j].setIcon(new ImageIcon(myImage.PipeImage.NULL.Image()));
-                mybuttons[i][j].addMouseListener(new myButtonListener(i, j){
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (ismousePressed) {
-                    gc.add(mybuttons[fi][fj].i, mybuttons[fi][fj].j, i0, j0);
+
+        mybuttons = new CellPanel[4][4];
+        int k = 0;
+        for (int l = 0; l < 4; l++) {
+            final int fi = l;
+            for (int m = 0; m < 4; m++) {
+                final int fj = m;
+                if ((k < dots.length) && (dots[k].x == l && dots[k].y == m)) {
+                    mybuttons[l][m] = new CellPanel(l, m, true, false, false, dots[k].color);
+                    k++;
+                } else if (level.getBridge() != null && level.getBridge().x == l && level.getBridge().y == m) {
+                    mybuttons[l][m] = new CellPanel(l, m, false, true, false, null);
+                } else if (level.getHall() != null && level.getHall().x == l && level.getHall().y == m) {
+                    mybuttons[l][m] = new CellPanel(l, m, false, false, true, null);
+                } else {
+                    mybuttons[l][m] = new CellPanel(l, m, false, false, false, null);
                 }
-            }
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (ismousePressed) {
-                    i0 = mybuttons[fi][fj].i;
-                    j0 = mybuttons[fi][fj].j;
-                }
-            }
-            @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                if (evt.getButton() == MouseEvent.BUTTON1) {
-                    ismousePressed = true;
-                    i0 = mybuttons[fi][fj].i;
-                    j0 = mybuttons[fi][fj].j;
-                    gc.removeLeaveLine(i0, j0);
-                }
-            }
-            @Override
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                if (evt.getButton() == MouseEvent.BUTTON1) {
-                    ismousePressed = false;
-                }       
-            }
+                mybuttons[l][m].addMouseListener(new myCellPanelListener(l, m) {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        if (ismousePressed) {
+                            try{
+                                gc.add(mybuttons[fi][fj].getRowIndex(), mybuttons[fi][fj].getColomunIndex(), i0, j0);
+                            }
+                            catch(IllegalArgumentException e){
+                                if(e.getMessage() == "moving horezentaly or verticaly only")
+                                    ismousePressed = false;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        if (ismousePressed) {
+                            i0 = mybuttons[fi][fj].getRowIndex();
+                            j0 = mybuttons[fi][fj].getColomunIndex();
+                        }
+                    }
+
+                    @Override
+                    public void mousePressed(java.awt.event.MouseEvent evt) {
+                        if (evt.getButton() == MouseEvent.BUTTON1) {
+                            ismousePressed = true;
+                            i0 = mybuttons[fi][fj].getRowIndex();
+                            j0 = mybuttons[fi][fj].getColomunIndex();
+                            gc.removeLeaveLine(i0, j0);
+                        }
+                    }
+
+                    @Override
+                    public void mouseReleased(java.awt.event.MouseEvent evt) {
+                        if (evt.getButton() == MouseEvent.BUTTON1) {
+                            ismousePressed = false;
+                        }
+                    }
                 });
-                        
+
             }
         }
-    }                                                                                  
-
-    
+    }
 
     /**
      * @param args the command line arguments
@@ -244,31 +234,32 @@ public class testing extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration                   
     private GameControllar gc;
-    myButton [][] mybuttons;
-    
-    private class myButton extends JButton{
-        public int i;
-        public int j;
+    CellPanel[][] mybuttons;
+    Level level;
+//    private class CellPanel extends JButton{
+//        public int i;
+//        public int j;
+//
+//        public CellPanel(int i, int j) {
+//            this.i = i;
+//            this.j = j;
+//        }        
+//    }
 
-        public myButton(int i, int j) {
-            this.i = i;
-            this.j = j;
-        }        
-    }
-    
-    private class myButtonListener extends MouseAdapter{
-        private final int i,j;
+    private class myCellPanelListener extends MouseAdapter {
+
+        private final int i, j;
         boolean ispressed;
-        
-        public myButtonListener(int i, int j) {
+
+        public myCellPanelListener(int i, int j) {
             this.i = i;
             this.j = j;
         }
-        
-        public void setIsPressed(boolean bool){
+
+        public void setIsPressed(boolean bool) {
             ispressed = bool;
         }
-        
+
         @Override
         public void mouseExited(MouseEvent e) {
             super.mouseExited(e); //To change body of generated methods, choose Tools | Templates.
@@ -288,7 +279,6 @@ public class testing extends javax.swing.JFrame {
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e); //To change body of generated methods, choose Tools | Templates.
         }
-        
+
     }
 }
-

@@ -36,18 +36,26 @@ public class myImage extends Component{
         }
     }
     PipeImage image;
-    int x,y;
     public myImage(PipeImage image){
         this.image = image;
-        x=10;
-        y=10;
-        this.setSize(100, 100);
+        this.setBounds(1, 1, 100, 100);
         this.setVisible(true);
+    }
+    
+    public myImage setXY(int x,int y){
+        this.setLocation(x, y);
+        return this;
+    }
+    
+    public myImage setDimension(int width,int height){
+        super.setSize(width, height);
+        return this;
     }
     @Override
     public void paint(Graphics g){
-        g.drawImage(image.Image(), x, y, this);
-        this.getParent().repaint();
+        super.paint(g);
+        g.drawImage(image.Image(), this.getX(), this.getY(), this.getParent());
+        
     }   
 
     @Override
