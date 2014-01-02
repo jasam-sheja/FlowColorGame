@@ -92,6 +92,7 @@ public class Cell {
         }
         if (dot != null) {
             this.color = dot.color;
+            this.crossColor = dot.color;
         }
         if (isHall) {
             this.up = State.BLOCKED;
@@ -457,5 +458,9 @@ public class Cell {
 
     public Dot getDot() {
         return dot;
+    }
+    
+    public boolean isHall(){
+        return up == State.BLOCKED && down == State.BLOCKED && right == State.BLOCKED && left == State.BLOCKED;
     }
 }

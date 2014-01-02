@@ -44,7 +44,7 @@ public class GameControllar {
             n++;
         } 
         if(n==2) {
-            throw new IllegalArgumentException("moving horezentaly of verticaly only");
+            throw new IllegalArgumentException("moving horezentaly or verticaly only");
         }
         else if(n==0){
             throw new IllegalArgumentException("moveing one cell at a time only");
@@ -150,4 +150,5 @@ public class GameControllar {
     public int CellsPerRow(){
         return this.maze.getLength();
     }
+    
 }
