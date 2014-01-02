@@ -1,10 +1,5 @@
 package ComponantsTest;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author DigitalNet
@@ -25,7 +20,7 @@ import javax.swing.*;
  */
 /**
  *
- * @author DigitalNet
+ * @author jasam sheja
  */
 public class testing extends javax.swing.JFrame {
 
@@ -72,7 +67,7 @@ public class testing extends javax.swing.JFrame {
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(Color.DARK_GRAY);
         add(centerPanel, BorderLayout.CENTER);
-        GridLayout gridLayout = new GridLayout(4, 4, 1, 1);
+        GridLayout gridLayout = new GridLayout(4, 4, 0, 0);
         centerPanel.setLayout(gridLayout);
         for (CellPanel[] buttons : mybuttons) {
             for (CellPanel button : buttons) {
@@ -83,9 +78,11 @@ public class testing extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void initMyComponents() {
-        Dot[] dots = new Dot[2];
-        dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 3, 3);
+        Dot[] dots = new Dot[4];
+        dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 0, 3);
         dots[1] = dots[0].next;
+        dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
+        dots[3] = dots[2].next;
         level = new Level(dots, null, null, 4, 1);
         gc = new GameControllar(level);
 
@@ -100,31 +97,31 @@ public class testing extends javax.swing.JFrame {
                         Cell.State state = (Cell.State) evt.getNewValue();
                         Cell thecell = (Cell) evt.getOldValue();
                         boolean hasPipe = state == Cell.State.CROSS_ENTERD
-                                        || state == Cell.State.ENTERD
-                                        || state == Cell.State.CROSS_LEAVED
-                                        || state == Cell.State.LEAVED;
+                                || state == Cell.State.ENTERD
+                                || state == Cell.State.CROSS_LEAVED
+                                || state == Cell.State.LEAVED;
                         Color color = null;
                         switch (evt.getPropertyName()) {
                             case "UP":
-                                if(hasPipe){
+                                if (hasPipe) {
                                     color = thecell.getColor(Cell.Side.UP);
                                 }
                                 mybuttons[fi][fj].setDrawUp(hasPipe, color);
                                 break;
                             case "DOWN":
-                                if(hasPipe){
+                                if (hasPipe) {
                                     color = thecell.getColor(Cell.Side.DOWN);
                                 }
                                 mybuttons[fi][fj].setDrawDown(hasPipe, color);
                                 break;
                             case "RIGHT":
-                                if(hasPipe){
+                                if (hasPipe) {
                                     color = thecell.getColor(Cell.Side.RIGHT);
                                 }
                                 mybuttons[fi][fj].setDrawRight(hasPipe, color);
                                 break;
                             case "LEFT":
-                                if(hasPipe){
+                                if (hasPipe) {
                                     color = thecell.getColor(Cell.Side.LEFT);
                                 }
                                 mybuttons[fi][fj].setDrawLeft(hasPipe, color);
@@ -155,19 +152,26 @@ public class testing extends javax.swing.JFrame {
                     @Override
                     public void mouseEntered(java.awt.event.MouseEvent evt) {
                         if (ismousePressed) {
-                            try{
-                                gc.add(mybuttons[fi][fj].getRowIndex(), mybuttons[fi][fj].getColomunIndex(), i0, j0);
+                            canAdd = (Math.abs(mybuttons[fi][fj].getRowIndex() - i0) + Math.abs(mybuttons[fi][fj].getColomunIndex() - j0)) == 1;
+                            if(canAdd){
+                                try {
+                                    if (!gc.add(mybuttons[fi][fj].getRowIndex(), mybuttons[fi][fj].getColomunIndex(), i0, j0)) {
+                                        canAdd = false;
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    if ("moving horezentaly or verticaly only".equals(e.getMessage())) {
+                                        canAdd = false;
+                                    }
+                                }
                             }
-                            catch(IllegalArgumentException e){
-                                if(e.getMessage() == "moving horezentaly or verticaly only")
-                                    ismousePressed = false;
-                            }
+                        } else if (mybuttons[fi][fj].getRowIndex() == i0 && mybuttons[fi][fj].getColomunIndex() == j0) {
+                            ismousePressed = true;
                         }
                     }
 
                     @Override
                     public void mouseExited(java.awt.event.MouseEvent evt) {
-                        if (ismousePressed) {
+                        if (ismousePressed && canAdd) {
                             i0 = mybuttons[fi][fj].getRowIndex();
                             j0 = mybuttons[fi][fj].getColomunIndex();
                         }
@@ -179,6 +183,8 @@ public class testing extends javax.swing.JFrame {
                             ismousePressed = true;
                             i0 = mybuttons[fi][fj].getRowIndex();
                             j0 = mybuttons[fi][fj].getColomunIndex();
+                            canAdd = true;
+                            color = mybuttons[fi][fj].getColor(true);
                             gc.removeLeaveLine(i0, j0);
                         }
                     }
@@ -187,6 +193,8 @@ public class testing extends javax.swing.JFrame {
                     public void mouseReleased(java.awt.event.MouseEvent evt) {
                         if (evt.getButton() == MouseEvent.BUTTON1) {
                             ismousePressed = false;
+                            canAdd = false;
+                            color = null;
                         }
                     }
                 });
@@ -227,6 +235,8 @@ public class testing extends javax.swing.JFrame {
 
     private int i, j, i0, j0;
     private boolean ismousePressed;
+    private boolean canAdd;
+    private Color color;
     // Variables declaration - do not modify                     
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -236,15 +246,6 @@ public class testing extends javax.swing.JFrame {
     private GameControllar gc;
     CellPanel[][] mybuttons;
     Level level;
-//    private class CellPanel extends JButton{
-//        public int i;
-//        public int j;
-//
-//        public CellPanel(int i, int j) {
-//            this.i = i;
-//            this.j = j;
-//        }        
-//    }
 
     private class myCellPanelListener extends MouseAdapter {
 

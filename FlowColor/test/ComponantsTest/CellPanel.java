@@ -53,19 +53,21 @@ public class CellPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 298, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    // <editor-fold defaultstate="collapsed" desc="Indexes">
+    // <editor-fold defaultstate="collapsed" desc="Indexes getting">
     public int getRowIndex() {
         return rowIndex;
     }
@@ -139,9 +141,9 @@ public class CellPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Set Colors">  
     public final void setColor(Color color, boolean horizental) {
         if (horizental) {
-            imgHorizental = color;
+            colorHorizental = color;
         } else {
-            imgVertical = color;
+            colorVertical = color;
         }        
     }
 
@@ -157,6 +159,11 @@ public class CellPanel extends javax.swing.JPanel {
     }
     // </editor-fold>  
     
+    // <editor-fold defaultstate="collapsed" desc="Get Colors">  
+    public final Color getColor(boolean horizental) {
+        return horizental?colorHorizental:colorVertical;
+    }
+    // </editor-fold>  
     private void doDrawing(Graphics g) {
 
         Graphics2D g2d = (Graphics2D) g;
@@ -174,7 +181,7 @@ public class CellPanel extends javax.swing.JPanel {
             x = factor / 2 - width / 2;
             y = factor / 2 - height / 2;
             g2d.drawRoundRect(x, y, width, height, width, height);
-            g2d.setColor(imgVertical);
+            g2d.setColor(colorVertical);
             g2d.fillRoundRect(x, y, width, height, width, height);
             n++;
         }
@@ -192,7 +199,7 @@ public class CellPanel extends javax.swing.JPanel {
             x = factor / 2 - width / 2;
             y = 0;
             g2d.drawRect(x, y, width, height);
-            g2d.setColor(imgVertical);
+            g2d.setColor(colorVertical);
             g2d.fillRect(x, y, width, height);
             np++;
         }
@@ -202,7 +209,7 @@ public class CellPanel extends javax.swing.JPanel {
             x = factor / 2 - width / 2;
             y = factor / 2 - width/2;
             g2d.drawRect(x, y, width, height);
-            g2d.setColor(imgVertical);
+            g2d.setColor(colorVertical);
             g2d.fillRect(x, y, width, height);
             np++;
         }
@@ -212,7 +219,7 @@ public class CellPanel extends javax.swing.JPanel {
             x = factor / 2 - height/2;
             y = factor / 2 - height / 2;
             g2d.drawRect(x, y, width, height);
-            g2d.setColor(imgVertical);
+            g2d.setColor(colorVertical);
             g2d.fillRect(x, y, width, height);
             np++;
         }
@@ -222,7 +229,7 @@ public class CellPanel extends javax.swing.JPanel {
             x = 0;
             y = factor / 2 - height / 2;
             g2d.drawRect(x, y, width, height);
-            g2d.setColor(imgVertical);
+            g2d.setColor(colorVertical);
             g2d.fillRect(x, y, width, height);
             np++;
         }
@@ -296,6 +303,6 @@ public class CellPanel extends javax.swing.JPanel {
     private final boolean drawHall;
 
     //colors of the pipes
-    Color imgHorizental;
-    Color imgVertical;
+    Color colorHorizental;
+    Color colorVertical;
 }
