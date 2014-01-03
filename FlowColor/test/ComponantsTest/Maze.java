@@ -12,6 +12,11 @@ public class Maze {
     private Cell[][] maze;
     private Dot[] dots;
     private int lenght;
+    private int gameNumber ;
+
+    public int getGameNumber() {
+        return gameNumber;
+    }
 
     public Maze(Dot[] dots, Bridge bridge, Hall hall, int lenght) {
         this.lenght = lenght;

@@ -5,14 +5,14 @@
  */
 
 package InputOutFiles;
-import Componants.Level ;
-import Componants.Maze ;
+import ComponantsTest.Level ;
+import ComponantsTest.Maze ;
 import java.io.* ;
 /**
  *
  * @author Wissam
  */
-public class Writer {
+public class GWriter {
     
     public static void levelsWriter (Level  level , String fileName){
     
