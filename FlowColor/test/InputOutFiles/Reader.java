@@ -16,7 +16,7 @@ import ComponantsTest.Maze ;
  *
  * @author Wissam
  */
-public class GReader {
+public class Reader {
     
     public static Level levelsReader (int levelNumber, String fileName){
         Level level ;

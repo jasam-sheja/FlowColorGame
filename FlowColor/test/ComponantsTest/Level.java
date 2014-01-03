@@ -8,11 +8,11 @@ import java.io.Serializable;
  */
 public class Level implements Serializable {
 
-    private Dot[] dots;
-    private Bridge bridge;
-    private Hall hall;
-    private int length;
-    private int levelNumber;
+    private final Dot[] dots;
+    private final Bridge bridge;
+    private final Hall hall;
+    private final int length;
+    private final int levelNumber;
 
     public Level(Dot[] dots, Bridge bridge, Hall hall, int length, int levelNumber) {
         this.dots = dots;

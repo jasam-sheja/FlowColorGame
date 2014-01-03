@@ -9,16 +9,20 @@ import java.util.Arrays;
  */
 public class Maze {
 
-    private Cell[][] maze;
-    private Dot[] dots;
-    private int lenght;
-    private int gameNumber ;
+    private static  int counter = 0 ;
+    private final Cell[][] maze;
+    private final Dot[] dots;
+    private final int lenght;
+    private final int gameNumber ;
 
     public int getGameNumber() {
         return gameNumber;
     }
 
     public Maze(Dot[] dots, Bridge bridge, Hall hall, int lenght) {
+        counter ++ ; 
+        this.gameNumber = counter ;
+
         this.lenght = lenght;
         if (dots == null) {
             throw new IllegalArgumentException();

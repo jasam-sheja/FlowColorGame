@@ -5,6 +5,7 @@
  */
 
 package InputOutFiles;
+
 import ComponantsTest.Level ;
 import ComponantsTest.Maze ;
 import java.io.* ;
@@ -12,17 +13,13 @@ import java.io.* ;
  *
  * @author Wissam
  */
-public class GWriter {
+public class Writer {
     
     public static void levelsWriter (Level  level , String fileName){
     
         ObjectOutputStream writeObject  ;
         try{
-            File file = new File(fileName);
-            if(!file.exists()) {
-               file.createNewFile();
-            }
-            writeObject = new ObjectOutputStream(new FileOutputStream(file,true) ) ;
+            writeObject = new ObjectOutputStream(new FileOutputStream(fileName) ) ;
             writeObject.writeObject(level);
             writeObject.flush();
             writeObject.close();
@@ -37,11 +34,7 @@ public class GWriter {
     
         ObjectOutputStream writeObject  ;
         try{
-            File file = new File(fileName);
-            if(!file.exists()) {
-               file.createNewFile();
-            }
-            writeObject = new ObjectOutputStream(new FileOutputStream(file,true) ) ;
+            writeObject = new ObjectOutputStream(new FileOutputStream(fileName) ) ;
             writeObject.writeObject(maze);
             writeObject.flush();
             writeObject.close();

@@ -7,7 +7,7 @@
 
 package InputOutFiles;
 
-import ComponantsTest.*  ;      
+import Componants.*  ;      
 import java.awt.Color;
         
         
