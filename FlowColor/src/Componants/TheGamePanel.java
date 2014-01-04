@@ -4,7 +4,6 @@ package Componants;
  *
  * @author DigitalNet
  */
-import InputOutFiles.GReader;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -13,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
+import InputOutFiles.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,7 +23,7 @@ import javax.swing.*;
  *
  * @author jasam sheja
  */
-public class TheGamePanel extends javax.swing.JFrame {
+public class TheGamePanel extends javax.swing.JPanel {
 
     /**
      * Creates new form testJtable
@@ -42,37 +42,15 @@ public class TheGamePanel extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        setTitle("Calculator");
-        setSize(300, 320);
-        setLocationRelativeTo(null);
+        //setSize(300, 320);
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jMenu1.setText("File");
-
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
-
-        JPanel centerPanel = new JPanel();
-        centerPanel.setBackground(Color.DARK_GRAY);
-        add(centerPanel, BorderLayout.CENTER);
+        
+        this.setBackground(Color.DARK_GRAY);
         GridLayout gridLayout = new GridLayout(mybuttons.length, mybuttons.length, 0, 0);
-        centerPanel.setLayout(gridLayout);
+        this.setLayout(gridLayout);
         for (CellPanel[] buttons : mybuttons) {
             for (CellPanel button : buttons) {
-                centerPanel.add(button);
+                this.add(button);
             }
         }
 
@@ -85,10 +63,10 @@ public class TheGamePanel extends javax.swing.JFrame {
 //        dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
 //        dots[3] = dots[2].next;
 //        level = new Level(dots, new Bridge(3, 3), new Hall(3, 0), 5, 1);
+//        gc = new GameControllar(level);
         level = GReader.levelsReader(1, "LevelTest.bin");
         Dot[] dots =  level.getDots() ;
         gc = new GameControllar(level);
-
         for (int i = 0; i < gc.CellsPerRow(); i++) {
             final int fi = i;
             for (int j = 0; j < gc.CellsPerRow(); j++) {
@@ -184,9 +162,10 @@ public class TheGamePanel extends javax.swing.JFrame {
                             ismousePressed = true;
                             i0 = mybuttons[fi][fj].getRowIndex();
                             j0 = mybuttons[fi][fj].getColomunIndex();
-                            canAdd = true;
                             color = mybuttons[fi][fj].getColor(true);
-                            gc.clearPath(i0, j0);                            
+                            canAdd = color!=null;
+                            if(canAdd)
+                                gc.clearPath(i0, j0);                            
                         }
                     }
 
@@ -231,7 +210,12 @@ public class TheGamePanel extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new TheGamePanel().setVisible(true);
+                JFrame frame = new JFrame("testing");
+                
+                TheGamePanel gamePanel =  new TheGamePanel();
+                frame.setSize(300, 320);
+                frame.add(gamePanel, BorderLayout.CENTER);
+                frame.setVisible(true);
             }
         });
     }
@@ -240,12 +224,7 @@ public class TheGamePanel extends javax.swing.JFrame {
     private boolean ismousePressed;
     private boolean canAdd;
     private Color color;
-    // Variables declaration - do not modify                     
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    // End of variables declaration                   
+    
     private GameControllar gc;
     CellPanel[][] mybuttons;
     Level level;
