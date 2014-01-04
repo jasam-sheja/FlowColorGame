@@ -10,18 +10,25 @@ public class Maze {
 
     private static  int counter = 0 ;
     private final Cell[][] maze;
+    private Level level;
     private final int lenght;
-    private final int gameNumber ;
+    private int gameNumber ;
 
     public int getGameNumber() {
         return gameNumber;
     }
 
-    public Maze(Dot[] dots, Bridge bridge, Hall hall, int lenght) {
-        counter ++ ; 
-        this.gameNumber = counter ;
+    public void setGameNumber(int gameNumber) {
+        this.gameNumber = gameNumber;
+    }
+    
 
-        this.lenght = lenght;
+    public Maze(Level level) {
+        Dot[] dots = level.getDots();
+        Bridge bridge = level.getBridge();
+        Hall hall = level.getHall();
+        this.level = level;
+        this.lenght = level.getLength();
         if (dots == null) {
             throw new IllegalArgumentException();
         } else if ((dots.length % 2) != 0 || dots.length < 2) {
@@ -54,6 +61,10 @@ public class Maze {
 
     public int getLength() {
         return lenght;
+    }
+
+    public Level getLevel() {
+        return level;
     }
     
     public Maze(Maze copy){

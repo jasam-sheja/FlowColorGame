@@ -40,6 +40,13 @@ public class MainClass extends JFrame {
         loadPlayers();
         timer.start();
     }
+    
+    public MainClass(Maze maze) {
+        initMyComponent(maze);
+        initComponents();
+        loadPlayers();
+        timer.start();
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
@@ -130,10 +137,19 @@ public class MainClass extends JFrame {
         gameGrid = new TheGamePanel(level);
         gameGrid.addListener(new GirdGameListener());
     }
+    private void initMyComponent(Maze newMaze) {
+        this.level = newMaze.getLevel();
+        gameGrid = new TheGamePanel(newMaze);
+        gameGrid.addListener(new GirdGameListener());
+    }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             int n = Integer.parseInt(JOptionPane.showInputDialog("enter game"));
+            Maze maze = GReader.gameReader(n, "myMazes.mqwe");
+            this.gameGrid = new TheGamePanel(maze);
+            gameGrid.addListener(new GirdGameListener());
+            this.add(gameGrid, BorderLayout.CENTER);
         } catch (NumberFormatException e) {
 
         }
@@ -142,15 +158,17 @@ public class MainClass extends JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             int n = Integer.parseInt(JOptionPane.showInputDialog("enter number to define the game"));
+            this.gameGrid.getGameControllar().saveMaze(n, "myMazes.mqwe");
         } catch (NumberFormatException e) {
 
         }
     }
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {
-        String str = "Name         Time    Moves";
+        String str = "rank  Name         Time    Moves";
+        int i=1;
         for (Player player : players) {
-            str = player.getName() + "   \t" + player.getTime() + "   \t" + player.getMoves();
+            str += "\n" + i++ + "        " + player.getName() + "         \t" + player.getTime() + "         \t" + player.getMoves();
         }
         JOptionPane.showMessageDialog(this, str);
     }
@@ -194,7 +212,12 @@ public class MainClass extends JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainClass(GReader.levelsReader(1, "LevelTest.bin")).setVisible(true);
+                try{
+                    int n = Integer.parseInt(JOptionPane.showInputDialog("enter game difficult"));
+                    new MainClass(GReader.levelsReader(n, "LevelTest.bin")).setVisible(true);
+                }catch(NumberFormatException e){
+                    System.exit(ABORT);
+                }                
             }
         });
     }

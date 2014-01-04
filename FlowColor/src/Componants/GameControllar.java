@@ -1,5 +1,6 @@
 package Componants;
 
+import InputOutFiles.GWriter;
 import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -19,13 +20,25 @@ public class GameControllar {
     private int unfilled2;
 
     public GameControllar(Level level) {
-        maze = new Maze(level.getDots(), level.getBridge(), level.getHall(), level.getLength());
+        maze = new Maze(level);
         maze2 = new Maze(maze);
         unfilled = 2 * (int) Math.pow(level.getLength(), 2) - level.getDots().length;
         if (level.getBridge() != null) {
             unfilled += 2;
         }
         if (level.getHall() != null) {
+            unfilled -= 2;
+        }
+        unfilled2 = unfilled;
+    }
+    public GameControllar(Maze newMaze) {
+        maze = newMaze;
+        maze2 = new Maze(maze);
+        unfilled = 2 * (int) Math.pow(newMaze.getLength(), 2) - newMaze.getLevel().getDots().length;
+        if (newMaze.getLevel().getBridge() != null) {
+            unfilled += 2;
+        }
+        if (newMaze.getLevel().getHall() != null) {
             unfilled -= 2;
         }
         unfilled2 = unfilled;
@@ -266,5 +279,10 @@ public class GameControllar {
         unfilled = unfilled2;
         unfilled2 = tempI;
         changeSupport.firePropertyChange("MAZE", maze2, maze);
+    }
+    
+    public void saveMaze(int gamenumber,String filename){
+        this.maze.setGameNumber(gamenumber);
+        GWriter.gameWriter(maze, filename);
     }
 }

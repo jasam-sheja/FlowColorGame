@@ -29,13 +29,17 @@ public class TheGamePanel extends javax.swing.JPanel {
     /**
      * Creates new form testJtable
      */
-    public TheGamePanel() {
-        initMyComponents();
-        initComponents();
-    }
 
     public TheGamePanel(Level level) {
         this.level = level;
+        gc = new GameControllar(level);
+        initMyComponents();
+        initComponents();
+    }
+    
+    public TheGamePanel(Maze maze) {
+        this.level = maze.getLevel();
+        gc = new GameControllar(maze);
         initMyComponents();
         initComponents();
     }
@@ -50,7 +54,82 @@ public class TheGamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        //setSize(300, 320);
+        Dot []dots = level.getDots();
+        mybuttons = new CellPanel[level.getLength()][level.getLength()];
+        int k = 0;
+        for (int l = 0; l < mybuttons.length; l++) {
+            final int fi = l;
+            for (int m = 0; m < mybuttons.length; m++) {
+                final int fj = m;
+                if ((k < dots.length) && (dots[k].x == l && dots[k].y == m)) {
+                    mybuttons[l][m] = new CellPanel(l, m, true, false, false, dots[k].color);
+                    k++;
+                } else if (level.getBridge() != null && level.getBridge().x == l && level.getBridge().y == m) {
+                    mybuttons[l][m] = new CellPanel(l, m, false, true, false, null);
+                } else if (level.getHall() != null && level.getHall().x == l && level.getHall().y == m) {
+                    mybuttons[l][m] = new CellPanel(l, m, false, false, true, null);
+                } else {
+                    mybuttons[l][m] = new CellPanel(l, m, false, false, false, null);
+                }
+                mybuttons[l][m].addMouseListener(new myCellPanelListener(l, m) {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        if (ismousePressed) {
+                            canAdd = (Math.abs(mybuttons[fi][fj].getRowIndex() - i0) + Math.abs(mybuttons[fi][fj].getColomunIndex() - j0)) == 1;
+                            if(canAdd){
+                                try {
+                                    if (!gc.add(mybuttons[fi][fj].getRowIndex(), mybuttons[fi][fj].getColomunIndex(), i0, j0)) {
+                                        canAdd = false;
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    if ("moving horezentaly or verticaly only".equals(e.getMessage())) {
+                                        canAdd = false;
+                                    }
+                                }
+                            }
+                        } 
+                    }
+
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        if (ismousePressed && canAdd) {
+                            i0 = mybuttons[fi][fj].getRowIndex();
+                            j0 = mybuttons[fi][fj].getColomunIndex();
+                        }
+                    }
+
+                    @Override
+                    public void mousePressed(java.awt.event.MouseEvent evt) {
+                        if (evt.getButton() == MouseEvent.BUTTON1) {
+                            ismousePressed = true;
+                            gc.saveState();
+                            i0 = mybuttons[fi][fj].getRowIndex();
+                            j0 = mybuttons[fi][fj].getColomunIndex();
+                            if((newMove = color != mybuttons[fi][fj].getColor(true)))
+                                color = mybuttons[fi][fj].getColor(true);
+                            canAdd = color!=null;
+                            if(canAdd)
+                                gc.clearPath(i0, j0);                            
+                        }
+                    }
+
+                    @Override
+                    public void mouseReleased(java.awt.event.MouseEvent evt) {
+                        if (evt.getButton() == MouseEvent.BUTTON1) {
+                            if(changeSupport!=null && newMove){
+                                changeSupport.firePropertyChange("MOVES", moves++, moves);
+                            }
+                                
+                            i0 = -10;
+                            j0 = -10;
+                            ismousePressed = false;
+                            canAdd = false;
+                        }
+                    }
+                });
+
+            }
+        }
 
         
         this.setBackground(Color.DARK_GRAY);
@@ -67,16 +146,8 @@ public class TheGamePanel extends javax.swing.JPanel {
     }// </editor-fold>                        
 
     private void initMyComponents() {
-//        Dot[] dots = new Dot[4];
-//        dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 0, 3);
-//        dots[1] = dots[0].next;
-//        dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
-//        dots[3] = dots[2].next;
-//        level = new Level(dots, new Bridge(3, 3), new Hall(3, 0), 5, 1);
-//        gc = new GameControllar(level);
-        level = GReader.levelsReader(1, "LevelTest.bin");
         Dot[] dots =  level.getDots() ;
-        gc = new GameControllar(level);
+        
         for (int i = 0; i < gc.CellsPerRow(); i++) {
             final int fi = i;
             for (int j = 0; j < gc.CellsPerRow(); j++) {
@@ -185,118 +256,10 @@ public class TheGamePanel extends javax.swing.JPanel {
                 }
             }
         });
-        mybuttons = new CellPanel[level.getLength()][level.getLength()];
-        int k = 0;
-        for (int l = 0; l < mybuttons.length; l++) {
-            final int fi = l;
-            for (int m = 0; m < mybuttons.length; m++) {
-                final int fj = m;
-                if ((k < dots.length) && (dots[k].x == l && dots[k].y == m)) {
-                    mybuttons[l][m] = new CellPanel(l, m, true, false, false, dots[k].color);
-                    k++;
-                } else if (level.getBridge() != null && level.getBridge().x == l && level.getBridge().y == m) {
-                    mybuttons[l][m] = new CellPanel(l, m, false, true, false, null);
-                } else if (level.getHall() != null && level.getHall().x == l && level.getHall().y == m) {
-                    mybuttons[l][m] = new CellPanel(l, m, false, false, true, null);
-                } else {
-                    mybuttons[l][m] = new CellPanel(l, m, false, false, false, null);
-                }
-                mybuttons[l][m].addMouseListener(new myCellPanelListener(l, m) {
-                    @Override
-                    public void mouseEntered(java.awt.event.MouseEvent evt) {
-                        if (ismousePressed) {
-                            canAdd = (Math.abs(mybuttons[fi][fj].getRowIndex() - i0) + Math.abs(mybuttons[fi][fj].getColomunIndex() - j0)) == 1;
-                            if(canAdd){
-                                try {
-                                    if (!gc.add(mybuttons[fi][fj].getRowIndex(), mybuttons[fi][fj].getColomunIndex(), i0, j0)) {
-                                        canAdd = false;
-                                    }
-                                } catch (IllegalArgumentException e) {
-                                    if ("moving horezentaly or verticaly only".equals(e.getMessage())) {
-                                        canAdd = false;
-                                    }
-                                }
-                            }
-                        } 
-                    }
-
-                    @Override
-                    public void mouseExited(java.awt.event.MouseEvent evt) {
-                        if (ismousePressed && canAdd) {
-                            i0 = mybuttons[fi][fj].getRowIndex();
-                            j0 = mybuttons[fi][fj].getColomunIndex();
-                        }
-                    }
-
-                    @Override
-                    public void mousePressed(java.awt.event.MouseEvent evt) {
-                        if (evt.getButton() == MouseEvent.BUTTON1) {
-                            ismousePressed = true;
-                            gc.saveState();
-                            i0 = mybuttons[fi][fj].getRowIndex();
-                            j0 = mybuttons[fi][fj].getColomunIndex();
-                            if((newMove = color != mybuttons[fi][fj].getColor(true)))
-                                color = mybuttons[fi][fj].getColor(true);
-                            canAdd = color!=null;
-                            if(canAdd)
-                                gc.clearPath(i0, j0);                            
-                        }
-                    }
-
-                    @Override
-                    public void mouseReleased(java.awt.event.MouseEvent evt) {
-                        if (evt.getButton() == MouseEvent.BUTTON1) {
-                            if(changeSupport!=null && newMove){
-                                changeSupport.firePropertyChange("MOVES", moves++, moves);
-                            }
-                                
-                            i0 = -10;
-                            j0 = -10;
-                            ismousePressed = false;
-                            canAdd = false;
-                        }
-                    }
-                });
-
-            }
-        }
+        
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TheGamePanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("testing");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                
-                TheGamePanel gamePanel =  new TheGamePanel();
-                frame.setSize(300, 320);
-                frame.add(gamePanel, BorderLayout.CENTER);
-                frame.setVisible(true);
-            }
-        });
-    }
+    
 
     private int i, j, i0=-10, j0=-10;
     private boolean ismousePressed;
