@@ -115,14 +115,14 @@ public class Cell {
     public Cell(Cell copy) {
         this.isCross = copy.isCross;
         this.changeSupport = copy.changeSupport;
-        this.color = copy.color!=null? new Color(copy.color.getRGB()) :null ;
-        this.crossColor = copy.crossColor!=null? new Color(copy.crossColor.getRGB()) :null ;
+        this.color = copy.color != null ? new Color(copy.color.getRGB()) : null;
+        this.crossColor = copy.crossColor != null ? new Color(copy.crossColor.getRGB()) : null;
         this.dot = copy.dot;
         this.down = copy.down;
         this.left = copy.left;
         this.right = copy.right;
         this.up = copy.up;
-        if(changeSupport != null){
+        if (changeSupport != null) {
             changeSupport.firePropertyChange(up.toString(), this, up);
             changeSupport.firePropertyChange(right.toString(), this, right);
             changeSupport.firePropertyChange(left.toString(), this, left);
@@ -131,7 +131,6 @@ public class Cell {
         this.pipeCount = copy.pipeCount;
     }
 
-    
     public boolean add(Side side, Color color) {
         if (side == null) {
             throw new NullPointerException("there should be a side to add to");
@@ -151,8 +150,9 @@ public class Cell {
                     return false;
                 } else if (isCross) {
                     if (down == State.CROSS_ENTERD) {
-                        if(!getColor(false).equals(color))
+                        if (!getColor(false).equals(color)) {
                             return false;
+                        }
                         up = State.CROSS_LEAVED;
                     } else {
                         up = State.CROSS_ENTERD;
@@ -160,8 +160,9 @@ public class Cell {
                     }
                 } else {
                     if (hasDot()) {
-                        if(!dot.color.equals(color))
+                        if (!dot.color.equals(color)) {
                             return false;
+                        }
                         if (!dot.next.isStart) {
                             up = State.LEAVED;
                             dot.isStart = true;
@@ -171,8 +172,9 @@ public class Cell {
                     } else if (down == State.ENTERD
                             || right == State.ENTERD
                             || left == State.ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         up = State.LEAVED;
                     } else {
                         up = State.ENTERD;
@@ -188,17 +190,19 @@ public class Cell {
                     return false;
                 } else if (isCross) {
                     if (up == State.CROSS_ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         down = State.CROSS_LEAVED;
                     } else {
                         down = State.CROSS_ENTERD;
                         this.crossColor = color;
-                    }                    
+                    }
                 } else {
                     if (hasDot()) {
-                        if(!dot.color.equals(color))
+                        if (!dot.color.equals(color)) {
                             return false;
+                        }
                         if (!dot.next.isStart) {
                             down = State.LEAVED;
                             dot.isStart = true;
@@ -208,8 +212,9 @@ public class Cell {
                     } else if (up == State.ENTERD
                             || right == State.ENTERD
                             || left == State.ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         down = State.LEAVED;
                     } else {
                         down = State.ENTERD;
@@ -225,17 +230,19 @@ public class Cell {
                     return false;
                 } else if (isCross) {
                     if (left == State.CROSS_ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         right = State.CROSS_LEAVED;
                     } else {
                         right = State.CROSS_ENTERD;
                         this.color = color;
-                    }                    
+                    }
                 } else {
                     if (hasDot()) {
-                        if(!dot.color.equals(color))
+                        if (!dot.color.equals(color)) {
                             return false;
+                        }
                         if (!dot.next.isStart) {
                             right = State.LEAVED;
                             dot.isStart = true;
@@ -245,8 +252,9 @@ public class Cell {
                     } else if (down == State.ENTERD
                             || up == State.ENTERD
                             || left == State.ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         right = State.LEAVED;
                     } else {
                         right = State.ENTERD;
@@ -262,8 +270,9 @@ public class Cell {
                     return false;
                 } else if (isCross) {
                     if (right == State.CROSS_ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         left = State.CROSS_LEAVED;
                     } else {
                         left = State.CROSS_ENTERD;
@@ -271,8 +280,9 @@ public class Cell {
                     }
                 } else {
                     if (hasDot()) {
-                        if(!dot.color.equals(color))
+                        if (!dot.color.equals(color)) {
                             return false;
+                        }
                         if (!dot.next.isStart) {
                             left = State.LEAVED;
                             dot.isStart = true;
@@ -282,8 +292,9 @@ public class Cell {
                     } else if (down == State.ENTERD
                             || right == State.ENTERD
                             || up == State.ENTERD) {
-                        if(!getColor(false).equals(color))
-                                return false;
+                        if (!getColor(false).equals(color)) {
+                            return false;
+                        }
                         left = State.LEAVED;
                     } else {
                         left = State.ENTERD;
@@ -365,8 +376,9 @@ public class Cell {
     }
 
     public Side getEntered() {
-        if(isCross)
+        if (isCross) {
             throw new InternalError("connot use with cell with bridge");
+        }
         if (up == State.ENTERD) {
             return Side.UP;
         } else if (down == State.ENTERD) {
@@ -381,8 +393,9 @@ public class Cell {
     }
 
     public Side getLeaved() {
-        if(isCross)
+        if (isCross) {
             throw new InternalError("connot use with cell with bridge");
+        }
         if (up == State.LEAVED) {
             return Side.UP;
         } else if (down == State.LEAVED) {
@@ -474,8 +487,9 @@ public class Cell {
                 return null;
         }
     }
+
     public Color getColor(boolean horizental) {
-        return horizental?color:crossColor;
+        return horizental ? color : crossColor;
     }
 
     private PropertyChangeSupport changeSupport;

@@ -12,26 +12,26 @@ public class GameControllar {
 
     private Maze maze;
     private Maze maze2;
-    
+
     private PropertyChangeSupport changeSupport;
-    
+
     private int unfilled;
     private int unfilled2;
 
     public GameControllar(Level level) {
         maze = new Maze(level.getDots(), level.getBridge(), level.getHall(), level.getLength());
         maze2 = new Maze(maze);
-        unfilled = 2*(int)Math.pow(level.getLength(),2)-level.getDots().length;
-        if(level.getBridge()!=null){
-            unfilled+=2;
+        unfilled = 2 * (int) Math.pow(level.getLength(), 2) - level.getDots().length;
+        if (level.getBridge() != null) {
+            unfilled += 2;
         }
-        if(level.getHall()!=null){
-            unfilled-=2;
+        if (level.getHall() != null) {
+            unfilled -= 2;
         }
-        unfilled2=unfilled;
+        unfilled2 = unfilled;
     }
 
-    public boolean add(int i, int j, int i0, int j0) {       
+    public boolean add(int i, int j, int i0, int j0) {
         Cell.Side side = null;//for the cell to
         int n = 0;
         if (i == i0 + 1) {
@@ -125,15 +125,14 @@ public class GameControllar {
                     to.remove(entered);
                 }
             }
-        }
-        else{
+        } else {
             unfilled--;
         }
-        if(unfilled==0){
-            changeSupport.firePropertyChange("unfilled", unfilled+1, unfilled);
-        }
-        else if(unfilled<0)
+        if (unfilled == 0) {
+            changeSupport.firePropertyChange("unfilled", unfilled + 1, unfilled);
+        } else if (unfilled < 0) {
             throw new InternalError("unfilled are negative");
+        }
         return true;
     }
 
@@ -143,9 +142,8 @@ public class GameControllar {
             return;
         }
         if (theCell.isCross() && !theCell.isFull()) {
-            removeLeaveLine(i, j, theCell.getLeaved(true)== Cell.Side.RIGHT || theCell.getLeaved(true)== Cell.Side.LEFT);
-        }
-        else if (theCell.hasDot()) {
+            removeLeaveLine(i, j, theCell.getLeaved(true) == Cell.Side.RIGHT || theCell.getLeaved(true) == Cell.Side.LEFT);
+        } else if (theCell.hasDot()) {
             removeLeaveLine(theCell.getDot().next.x, theCell.getDot().next.y);
         }
         removeLeaveLine(i, j);
@@ -161,8 +159,9 @@ public class GameControllar {
             if (leaveSide == null) {
                 return;
             }
-            if(cell.remove(leaveSide))
+            if (cell.remove(leaveSide)) {
                 unfilled++;
+            }
             switch (leaveSide) {
                 case UP:
                     i--;
@@ -178,8 +177,9 @@ public class GameControllar {
                     break;
             }
             cell = this.maze.getCellAt(i, j);
-            if(cell.remove(leaveSide.Opposite()))
+            if (cell.remove(leaveSide.Opposite())) {
                 unfilled++;
+            }
             if (!cell.isCross()) {
                 removeLeaveLine(i, j);
             } else {
@@ -206,8 +206,9 @@ public class GameControllar {
         if (leaveSide == null) {
             return;
         }
-        if(cell.remove(leaveSide))
+        if (cell.remove(leaveSide)) {
             unfilled++;
+        }
         switch (leaveSide) {
             case UP:
                 i--;
@@ -223,8 +224,9 @@ public class GameControllar {
                 break;
         }
         cell = this.maze.getCellAt(i, j);
-        if(cell.remove(leaveSide.Opposite()))
+        if (cell.remove(leaveSide.Opposite())) {
             unfilled++;
+        }
         if (!cell.isCross()) {
             removeLeaveLine(i, j);
         } else {
@@ -246,16 +248,17 @@ public class GameControllar {
         }
         changeSupport.addPropertyChangeListener(listener);
     }
-    
+
     public int CellsPerRow() {
         return this.maze.getLength();
     }
 
-    public void saveState(){
+    public void saveState() {
         maze2 = new Maze(maze);
         unfilled2 = unfilled;
     }
-    public void undo(){
+
+    public void undo() {
         Maze tempMaze = maze;
         maze = maze2;
         maze2 = tempMaze;

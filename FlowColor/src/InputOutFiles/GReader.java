@@ -29,6 +29,7 @@ public class GReader {
                 break ;
             
         }
+        readObject.close();
         return level ;
         
         }
@@ -55,6 +56,7 @@ public class GReader {
                 break ;
             
         }
+        readObject.close();
         return maze ;
         
         }

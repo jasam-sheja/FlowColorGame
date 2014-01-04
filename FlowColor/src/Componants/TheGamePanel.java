@@ -235,7 +235,8 @@ public class TheGamePanel extends javax.swing.JPanel {
                             gc.saveState();
                             i0 = mybuttons[fi][fj].getRowIndex();
                             j0 = mybuttons[fi][fj].getColomunIndex();
-                            color = mybuttons[fi][fj].getColor(true);
+                            if((newMove = color != mybuttons[fi][fj].getColor(true)))
+                                color = mybuttons[fi][fj].getColor(true);
                             canAdd = color!=null;
                             if(canAdd)
                                 gc.clearPath(i0, j0);                            
@@ -245,7 +246,7 @@ public class TheGamePanel extends javax.swing.JPanel {
                     @Override
                     public void mouseReleased(java.awt.event.MouseEvent evt) {
                         if (evt.getButton() == MouseEvent.BUTTON1) {
-                            if(ismousePressed && changeSupport!=null){
+                            if(changeSupport!=null && newMove){
                                 changeSupport.firePropertyChange("MOVES", moves++, moves);
                             }
                                 
@@ -253,7 +254,6 @@ public class TheGamePanel extends javax.swing.JPanel {
                             j0 = -10;
                             ismousePressed = false;
                             canAdd = false;
-                            color = null;
                         }
                     }
                 });
@@ -308,7 +308,7 @@ public class TheGamePanel extends javax.swing.JPanel {
     private Level level;
     
     private int moves;
-    
+    private boolean newMove;
     private PropertyChangeSupport changeSupport;
     
     public void addListener(PropertyChangeListener listener){
