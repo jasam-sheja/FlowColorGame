@@ -112,6 +112,26 @@ public class Cell {
         }
     }
 
+    public Cell(Cell copy) {
+        this.isCross = copy.isCross;
+        this.changeSupport = copy.changeSupport;
+        this.color = copy.color!=null? new Color(copy.color.getRGB()) :null ;
+        this.crossColor = copy.crossColor!=null? new Color(copy.crossColor.getRGB()) :null ;
+        this.dot = copy.dot;
+        this.down = copy.down;
+        this.left = copy.left;
+        this.right = copy.right;
+        this.up = copy.up;
+        if(changeSupport != null){
+            changeSupport.firePropertyChange(up.toString(), this, up);
+            changeSupport.firePropertyChange(right.toString(), this, right);
+            changeSupport.firePropertyChange(left.toString(), this, left);
+            changeSupport.firePropertyChange(down.toString(), this, down);
+        }
+        this.pipeCount = copy.pipeCount;
+    }
+
+    
     public boolean add(Side side, Color color) {
         if (side == null) {
             throw new NullPointerException("there should be a side to add to");

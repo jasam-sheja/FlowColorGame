@@ -10,7 +10,6 @@ public class Maze {
 
     private static  int counter = 0 ;
     private final Cell[][] maze;
-    private final Dot[] dots;
     private final int lenght;
     private final int gameNumber ;
 
@@ -30,7 +29,6 @@ public class Maze {
         }
 
         Arrays.sort(dots, new DotCompByPosition());
-        this.dots = dots;
         this.maze = new Cell[lenght][lenght];
         int k = 0;
         for (int i = 0; i < lenght; i++) {
@@ -56,5 +54,16 @@ public class Maze {
 
     public int getLength() {
         return lenght;
+    }
+    
+    public Maze(Maze copy){
+        this.lenght = copy.lenght;
+        this.gameNumber = copy.gameNumber;
+        this.maze = new Cell[copy.lenght][copy.lenght];
+        for (int i = 0; i < copy.lenght; i++) {
+            for (int j = 0; j < copy.lenght; j++) {
+                maze[i][j] = new Cell(copy.maze[i][j]);
+            }            
+        }
     }
 }

@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import InputOutFiles.*;
+import java.beans.PropertyChangeSupport;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,6 +33,13 @@ public class TheGamePanel extends javax.swing.JPanel {
         initMyComponents();
         initComponents();
     }
+
+    public TheGamePanel(Level level) {
+        this.level = level;
+        initMyComponents();
+        initComponents();
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +61,8 @@ public class TheGamePanel extends javax.swing.JPanel {
                 this.add(button);
             }
         }
+        
+        moves = 0;
 
     }// </editor-fold>                        
 
@@ -112,7 +122,69 @@ public class TheGamePanel extends javax.swing.JPanel {
                 }, i, j);
             }
         }
+        gc.addPropertyChangeListner(new PropertyChangeListener() {
 
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equalsIgnoreCase("unfilled")){
+                    changeSupport.firePropertyChange("finished", false, true);
+                }else if(evt.getPropertyName().equalsIgnoreCase("maze")){
+                    int length = ((Maze)evt.getNewValue()).getLength();
+                    for (int k = 0; k < length; k++) {
+                        for (int l = 0; l < length; l++) {
+                            Cell theCell = ((Maze) evt.getNewValue()).getCellAt(k, l);
+                            
+                            boolean up = false,down = false,left = false,right = false;
+                            Cell.Side side = theCell.getEntered(true);
+                            if(side != null)
+                                switch(side){
+                                    case RIGHT:
+                                        right = true;
+                                        break;
+                                    case LEFT:
+                                        left = true;
+                                        break;
+                                }
+                            side = theCell.getLeaved(true);
+                            if(side != null)
+                                switch(side){
+                                    case RIGHT:
+                                        right = true;
+                                        break;
+                                    case LEFT:
+                                        left = true;
+                                        break;
+                                }
+                            side = theCell.getEntered(false);
+                            if(side != null)
+                                switch(side){
+                                    case UP:
+                                        up = true;
+                                        break;
+                                    case DOWN:
+                                        down = true;
+                                        break;
+                                }
+                            side = theCell.getLeaved(false);
+                            if(side != null)
+                                switch(side){
+                                    case UP:
+                                        up = true;
+                                        break;
+                                    case DOWN:
+                                        down = true;
+                                        break;
+                                }
+                            mybuttons[k][l].setDrawUp(up, theCell.getColor(Cell.Side.UP));
+                            mybuttons[k][l].setDrawDown(down, theCell.getColor(Cell.Side.DOWN));
+                            mybuttons[k][l].setDrawRight(right, theCell.getColor(Cell.Side.RIGHT));
+                            mybuttons[k][l].setDrawLeft(left, theCell.getColor(Cell.Side.LEFT));
+                        
+                        }
+                    }
+                }
+            }
+        });
         mybuttons = new CellPanel[level.getLength()][level.getLength()];
         int k = 0;
         for (int l = 0; l < mybuttons.length; l++) {
@@ -160,6 +232,7 @@ public class TheGamePanel extends javax.swing.JPanel {
                     public void mousePressed(java.awt.event.MouseEvent evt) {
                         if (evt.getButton() == MouseEvent.BUTTON1) {
                             ismousePressed = true;
+                            gc.saveState();
                             i0 = mybuttons[fi][fj].getRowIndex();
                             j0 = mybuttons[fi][fj].getColomunIndex();
                             color = mybuttons[fi][fj].getColor(true);
@@ -172,6 +245,10 @@ public class TheGamePanel extends javax.swing.JPanel {
                     @Override
                     public void mouseReleased(java.awt.event.MouseEvent evt) {
                         if (evt.getButton() == MouseEvent.BUTTON1) {
+                            if(ismousePressed && changeSupport!=null){
+                                changeSupport.firePropertyChange("MOVES", moves++, moves);
+                            }
+                                
                             i0 = -10;
                             j0 = -10;
                             ismousePressed = false;
@@ -211,7 +288,7 @@ public class TheGamePanel extends javax.swing.JPanel {
             @Override
             public void run() {
                 JFrame frame = new JFrame("testing");
-                frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 
                 TheGamePanel gamePanel =  new TheGamePanel();
                 frame.setSize(300, 320);
@@ -229,6 +306,20 @@ public class TheGamePanel extends javax.swing.JPanel {
     private GameControllar gc;
     private CellPanel[][] mybuttons;
     private Level level;
+    
+    private int moves;
+    
+    private PropertyChangeSupport changeSupport;
+    
+    public void addListener(PropertyChangeListener listener){
+        if (listener == null) {
+            return;
+        }
+        if (changeSupport == null) {
+            changeSupport = new PropertyChangeSupport(this);
+        }
+        changeSupport.addPropertyChangeListener(listener);
+    }
 
     private class myCellPanelListener extends MouseAdapter {
 
@@ -264,5 +355,15 @@ public class TheGamePanel extends javax.swing.JPanel {
             super.mousePressed(e); //To change body of generated methods, choose Tools | Templates.
         }
 
+    }
+    
+    public GameControllar getGameControllar(){
+        return gc;
+    }
+    public void increaseMoves(){
+        changeSupport.firePropertyChange("moves", moves++, moves);
+    }
+    public void decreaseMoves(){
+        changeSupport.firePropertyChange("moves", moves--, moves);
     }
 }
