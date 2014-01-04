@@ -43,17 +43,22 @@ public class GameControllar {
         }
 
         Cell from = this.maze.getCellAt(i0, j0);
-        if ((from.hasDot() && from.getDot().next.isStart)
-                || (from.isEmpty() && !from.hasDot())
-                || from.isFull()) {
-            //return false;
+        if (from.hasDot() && from.getDot().next.isStart && from.getEntered() == null) {
             removeLeaveLine(from.getDot().next.x, from.getDot().next.y);
+        }
+        if ((from.isEmpty() && !from.hasDot())
+                || from.isFull()
+                || from.isHall()) {
+            return false;
+        }
+        if (from.isCross() && from.getEntered(side == Cell.Side.RIGHT || side == Cell.Side.LEFT) == null) {
+            return false;
         }
 
         Cell to = this.maze.getCellAt(i, j);
         if (to.isHall()) {
             return false;
-        } 
+        }
 
         Color color = from.getColor(side);
         if (color == null) {
@@ -61,27 +66,30 @@ public class GameControllar {
         }
         if (to.hasDot() && !to.getColor(side).equals(color)) {
             return false;
-        } else if (!to.isEmpty()&& !to.getColor(side).equals(color)) {
-            int toIsFromI = i;
-            int toIsFromJ = j;
-            switch (to.getEntered()) {
-                case UP:
-                    toIsFromI--;
-                    break;
-                case DOWN:
-                    toIsFromI++;
-                    break;
-                case RIGHT:
-                    toIsFromJ++;
-                    break;
-                case LEFT:
-                    toIsFromJ--;
-                    break;
-            }
-            if (to.isCross()) {
-                removeLeaveLine(toIsFromI, toIsFromJ, side == Cell.Side.RIGHT || side == Cell.Side.LEFT);
-            } else {
-                removeLeaveLine(toIsFromI, toIsFromJ);
+        } else if (!to.isEmpty() && !to.hasDot()) {
+            if (!(to.getColor(side) == null) && !to.getColor(side).equals(color)) {
+
+                int toIsFromI = i;
+                int toIsFromJ = j;
+                switch (to.getEntered()) {
+                    case UP:
+                        toIsFromI--;
+                        break;
+                    case DOWN:
+                        toIsFromI++;
+                        break;
+                    case RIGHT:
+                        toIsFromJ++;
+                        break;
+                    case LEFT:
+                        toIsFromJ--;
+                        break;
+                }
+                if (to.isCross() && to.getEntered(side == Cell.Side.RIGHT || side == Cell.Side.LEFT) != null && !to.getColor(side).equals(color)) {
+                    removeLeaveLine(toIsFromI, toIsFromJ, side == Cell.Side.RIGHT || side == Cell.Side.LEFT);
+                } else if (!to.getColor(side).equals(color)) {
+                    removeLeaveLine(toIsFromI, toIsFromJ);
+                }
             }
         }
 
@@ -105,15 +113,20 @@ public class GameControllar {
         return true;
     }
 
-    public void clearPath(int i,int j){
+    public void clearPath(int i, int j) {
         Cell theCell = maze.getCellAt(i, j);
-        if(theCell.isCross() || theCell.isHall() || (theCell.isEmpty()&& !theCell.hasDot()))
+        if (theCell.isHall() || (theCell.isEmpty() && !theCell.hasDot())) {
             return;
-        if(theCell.hasDot()){
+        }
+        if (theCell.isCross() && !theCell.isFull()) {
+            removeLeaveLine(i, j, theCell.getLeaved(true)== Cell.Side.RIGHT || theCell.getLeaved(true)== Cell.Side.LEFT);
+        }
+        else if (theCell.hasDot()) {
             removeLeaveLine(theCell.getDot().next.x, theCell.getDot().next.y);
         }
         removeLeaveLine(i, j);
     }
+
     public void removeLeaveLine(int i, int j) {
         Cell cell = this.maze.getCellAt(i, j);
         if (cell.isEmpty()) {

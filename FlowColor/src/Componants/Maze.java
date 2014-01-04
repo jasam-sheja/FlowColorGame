@@ -1,6 +1,5 @@
 package Componants;
 
-import java.awt.Color;
 import java.util.Arrays;
 
 /**
@@ -53,10 +52,6 @@ public class Maze {
 
     public Cell getCellAt(int i, int j) {
         return maze[i][j];
-    }
-
-    public Dot getFirstDotOfColor(Color color) {
-        throw new UnsupportedOperationException();
     }
 
     public int getLength() {

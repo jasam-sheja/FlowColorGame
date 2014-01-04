@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -165,73 +163,42 @@ public class CellPanel extends javax.swing.JPanel {
     }
     // </editor-fold>  
     private void doDrawing(Graphics g) {
-
+        
         Graphics2D g2d = (Graphics2D) g;
+        
+        g2d.setColor(Color.BLACK);
+
         int n = 0, np = 0;
-        int x;
-        int y;
-        int width;
-        int height;
-        int factor = Math.max(getSize().width, getSize().height);
         
         g2d.setColor(Color.LIGHT_GRAY);   //bordor color     
         if (drawDot) {
-            width = 2*factor / 3;
-            height = 2*factor / 3;
-            x = factor / 2 - width / 2;
-            y = factor / 2 - height / 2;
-            g2d.drawRoundRect(x, y, width, height, width, height);
-            g2d.setColor(colorVertical);
-            g2d.fillRoundRect(x, y, width, height, width, height);
+            drawDot(g2d);
             n++;
         }
-        if (drawBridge) {
 
-            n++;
-        }
         if (drawHall) {
-
+            drawHall(g2d);
             n++;
         }
         if (drawUp) {
-            width = factor / 3;
-            height = factor / 2 + width/2;
-            x = factor / 2 - width / 2;
-            y = 0;
-            g2d.drawRect(x, y, width, height);
-            g2d.setColor(colorVertical);
-            g2d.fillRect(x, y, width, height);
+            drawUpPipe(g2d);
             np++;
         }
         if (drawDown) {
-            width = factor / 3;
-            height = factor / 2 + width/2;
-            x = factor / 2 - width / 2;
-            y = factor / 2 - width/2;
-            g2d.drawRect(x, y, width, height);
-            g2d.setColor(colorVertical);
-            g2d.fillRect(x, y, width, height);
+            drawDownPipe(g2d);
             np++;
         }
         if (drawRight) {
-            height = factor / 3;
-            width = factor / 2 + height/2;
-            x = factor / 2 - height/2;
-            y = factor / 2 - height / 2;
-            g2d.drawRect(x, y, width, height);
-            g2d.setColor(colorVertical);
-            g2d.fillRect(x, y, width, height);
+            drawRightPipe(g2d);
             np++;
         }
         if (drawLeft) {
-            height = factor / 3;
-            width = factor / 2 + height/2;
-            x = 0;
-            y = factor / 2 - height / 2;
-            g2d.drawRect(x, y, width, height);
-            g2d.setColor(colorVertical);
-            g2d.fillRect(x, y, width, height);
+            drawLeftPipe(g2d);
             np++;
+        }
+        if (drawBridge) {
+            drawCross(g2d);            
+            n++;
         }
         this.repaint();//show the result
         if (n > 1) {
@@ -241,7 +208,127 @@ public class CellPanel extends javax.swing.JPanel {
             throw new IllegalArgumentException("no more than 2 pipe in this cell");
         }
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="objects drawing methods">  
+    private void drawHall(Graphics2D g2d){
+        int factor = Math.max(getSize().width, getSize().height);
+        int width = 2*factor / 3;
+        int height = 2*factor / 3;
+        int x = factor / 2 - width / 2;
+        int y = factor / 2 - height / 2;
+        g2d.setColor(Color.GRAY);
+        g2d.fillRoundRect(x, y, width, height, width, height);
+        factor /= 2; 
+        width = 2*factor / 3;
+        height = 2*factor / 3;
+        x = factor - width / 2;
+        y = factor - height / 2;
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.fillRoundRect(x, y, width, height, width, height);
+        factor /= 2; 
+        width = 2*factor / 3;
+        height = 2*factor / 3;
+        x = 2*factor - width / 2;
+        y = 2*factor - height / 2;
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(x, y, width, height, width, height);
+    }
 
+    private void drawDot(Graphics2D g2d){
+        int factor = Math.max(getSize().width, getSize().height);
+        
+        g2d.setColor(Color.LIGHT_GRAY);   //bordor color     
+        int width = 2*factor / 3;
+        int height = 2*factor / 3;
+        int x = factor / 2 - width / 2;
+        int y = factor / 2 - height / 2;
+        g2d.drawRoundRect(x, y, width, height, width, height);
+        g2d.setColor(colorVertical);
+        g2d.fillRoundRect(x, y, width, height, width, height);
+    }
+    
+    private void drawCross(Graphics2D g2d){
+        int x;
+        int y;
+        int width;
+        int height;
+        int factor = Math.max(getSize().width, getSize().height);
+        Color horizentalColor = (drawRight || drawLeft)?colorHorizental:Color.GRAY;
+        Color verticalColor = (drawUp || drawDown)?colorVertical:Color.GRAY;
+        
+        height = factor / 3;
+        width = factor / 3;
+
+        g2d.setColor(horizentalColor);
+        x = 0;
+        y = factor / 2 - height / 2;
+        g2d.drawLine(x, y, factor/2-width/2, y);
+        y = factor / 2 + height / 2;
+        g2d.drawLine(x, y, factor/2-width/2, y);
+
+        x = factor;
+        y = factor / 2 - height / 2;
+        g2d.drawLine(x, y, factor/2+width/2, y);
+        y = factor / 2 + height / 2;
+        g2d.drawLine(x, y, factor/2+width/2, y);
+        
+        g2d.setColor(verticalColor);
+        y = 0;
+        x = factor / 2 - height / 2;
+        g2d.drawLine(x, y ,x ,factor/2-width/2);
+        x = factor / 2 + height / 2;
+        g2d.drawLine(x, y ,x , factor/2-width/2);
+
+        y = factor;
+        x = factor / 2 - height / 2;
+        g2d.drawLine(x, y, x,factor/2+width/2);
+        x = factor / 2 + height / 2;
+        g2d.drawLine(x, y, x,factor/2+width/2);      
+        
+    }
+    
+    private void drawUpPipe(Graphics2D g2d){
+        int factor = Math.max(getSize().width, getSize().height);
+        int width = factor / 3;
+        int height = drawBridge?factor:factor / 2 + width/2;
+        int x = factor / 2 - width / 2;
+        int y = 0;
+        g2d.drawRect(x, y, width, height);
+        g2d.setColor(colorVertical);
+        g2d.fillRect(x, y, width, height);
+    }
+    private void drawDownPipe(Graphics2D g2d){
+        int factor = Math.max(getSize().width, getSize().height);
+        int width = factor / 3;
+        int height = drawBridge?factor:factor / 2 + width/2;
+        int x = factor / 2 - width / 2;
+        int y = factor / 2 - width/2;
+        g2d.drawRect(x, y, width, height);
+        g2d.setColor(colorVertical);
+        g2d.fillRect(x, y, width, height);
+    }
+    private void drawRightPipe(Graphics2D g2d){
+        int factor = Math.max(getSize().width, getSize().height);
+        int height = factor / 3;
+        int width = drawBridge?factor:factor / 2 + height/2;
+        int x = factor / 2 - height/2;
+        int y = factor / 2 - height / 2;
+        g2d.drawRect(x, y, width, height);
+        g2d.setColor(colorHorizental);
+        g2d.fillRect(x, y, width, height);
+    }
+    private void drawLeftPipe(Graphics2D g2d){
+        int factor = Math.max(getSize().width, getSize().height);
+        int height = factor / 3;
+        int width = drawBridge?factor: factor / 2 + height/2;
+        int x = 0;
+        int y = factor / 2 - height / 2;
+        g2d.drawRect(x, y, width, height);
+        g2d.setColor(colorHorizental);
+        g2d.fillRect(x, y, width, height);
+    }
+    // </editor-fold> 
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -272,12 +359,12 @@ public class CellPanel extends javax.swing.JPanel {
             public void run() {
                 JFrame j = new JFrame("test");
                 j.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                j.setSize(480, 320);
-                Image im = new ImageIcon(this.getClass().getResource("/pipes/Blue.png")).getImage();
-                CellPanel cellPanel = new CellPanel(0,0,false,false,false,null);
+                j.setSize(300, 320);
+                CellPanel cellPanel = new CellPanel(0,0,false,true,false,null);
                 cellPanel.setSize(50);
+                
                 cellPanel.setDrawUp(true, Color.BLUE);
-                cellPanel.setDrawDown(true, Color.BLUE);
+                //cellPanel.setDrawDown(true, Color.BLUE);
                 j.add(cellPanel);
                 j.setVisible(true);
             }

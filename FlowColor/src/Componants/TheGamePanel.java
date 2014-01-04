@@ -84,7 +84,7 @@ public class TheGamePanel extends javax.swing.JFrame {
 //        dots[1] = dots[0].next;
 //        dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
 //        dots[3] = dots[2].next;
-//        level = new Level(dots, null, null, 5, 1);
+//        level = new Level(dots, new Bridge(3, 3), new Hall(3, 0), 5, 1);
         level = GReader.levelsReader(1, "LevelTest.bin");
         Dot[] dots =  level.getDots() ;
         gc = new GameControllar(level);
