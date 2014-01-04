@@ -4,6 +4,7 @@ package Main;
 
 import Componants.*;
 import InputOutFiles.*;
+import javax.swing.Timer;
 
 /**
  *
@@ -11,6 +12,8 @@ import InputOutFiles.*;
  */
 public class MainClass {
     
-    
+    private TheGamePanel gameGrid;
+    private Timer timer;
+    GReader reader;
     
 }

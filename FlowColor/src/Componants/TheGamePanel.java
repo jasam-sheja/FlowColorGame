@@ -211,6 +211,7 @@ public class TheGamePanel extends javax.swing.JPanel {
             @Override
             public void run() {
                 JFrame frame = new JFrame("testing");
+                frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
                 
                 TheGamePanel gamePanel =  new TheGamePanel();
                 frame.setSize(300, 320);
@@ -226,8 +227,8 @@ public class TheGamePanel extends javax.swing.JPanel {
     private Color color;
     
     private GameControllar gc;
-    CellPanel[][] mybuttons;
-    Level level;
+    private CellPanel[][] mybuttons;
+    private Level level;
 
     private class myCellPanelListener extends MouseAdapter {
 
