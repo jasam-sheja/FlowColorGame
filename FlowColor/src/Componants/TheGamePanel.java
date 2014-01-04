@@ -4,6 +4,7 @@ package Componants;
  *
  * @author DigitalNet
  */
+import InputOutFiles.GReader;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -78,12 +79,14 @@ public class TheGamePanel extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void initMyComponents() {
-        Dot[] dots = new Dot[4];
-        dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 0, 3);
-        dots[1] = dots[0].next;
-        dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
-        dots[3] = dots[2].next;
-        level = new Level(dots, null, null, 5, 1);
+//        Dot[] dots = new Dot[4];
+//        dots[0] = new Dot(Color.BLUE, 0, 0, Color.BLUE, 0, 3);
+//        dots[1] = dots[0].next;
+//        dots[2] = new Dot(Color.yellow, 2, 2, Color.yellow, 1, 1);
+//        dots[3] = dots[2].next;
+//        level = new Level(dots, null, null, 5, 1);
+        level = GReader.levelsReader(1, "LevelTest.bin");
+        Dot[] dots =  level.getDots() ;
         gc = new GameControllar(level);
 
         for (int i = 0; i < gc.CellsPerRow(); i++) {
