@@ -1,6 +1,9 @@
 package Main;
 
-import Componants.*;
+import Componants.Level;
+import Componants.Maze;
+import Componants.Player;
+import Componants.TheGamePanel;
 import InputOutFiles.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
