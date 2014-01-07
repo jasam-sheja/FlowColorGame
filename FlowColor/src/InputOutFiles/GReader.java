@@ -3,103 +3,102 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package InputOutFiles;
 
-
-import Componants.Level ;
+import Componants.Dot;
+import Componants.Level;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import Componants.Maze ;
+import Componants.Maze;
+import java.io.BufferedInputStream;
+import java.util.ArrayList;
+
 /**
  *
  * @author Wissam
  */
 public class GReader {
-    
-    public static Level levelsReader (int levelNumber, String fileName){
-        Level level ;
-        ObjectInputStream readObjectS ;
-        try{        
-         readObjectS = new ObjectInputStream(new FileInputStream(fileName)) ;
-        while (true){
-            level = (Level) readObjectS.readObject() ;
-            if (level==null)
-            System.out.println(level.getLevelNumber());
-            
-            if ((level == null)||(level.getLevelNumber() == levelNumber)){
-                break ;
-            }           
-        }
-        readObjectS.close();
-        
-        return level ;
-        
-        }
-        catch (ClassNotFoundException ex){
+
+    public static ArrayList<Level> levelsReader( String fileName) {
+        ArrayList<Level> levels = new ArrayList<Level>();
+        ObjectInputStream readObjectS;
+        try {
+            readObjectS = new ObjectInputStream(new FileInputStream(fileName));
+            levels = (ArrayList<Level>) readObjectS.readObject();
+            readObjectS.close();
+
+            return levels;
+
+        } catch (ClassNotFoundException ex) {
             System.err.println(ex.getMessage());
-            return null ;
-        }
-        catch(IOException ex){
+            return null;
+        } catch (IOException ex) {
             System.err.println(ex.getMessage());
-            return null ;
+            return null;
         }
-        
-        
-        
+
     }
-    public static Maze gameReader (int gameNumber, String fileName){
-        Maze maze ;
-        ObjectInputStream readObject ;
-        try{        
-         readObject = new ObjectInputStream(new FileInputStream(fileName)) ;
-        while (true){
-            maze = (Maze) readObject.readObject() ;
-            if ((maze == null)||(maze.getGameNumber()== gameNumber))
-                break ;
-            
+    public static Level levelReader(int leverNumber , String fileName){
+        ArrayList<Level> levels = levelsReader(fileName) ;
+        for (Level level :levels){
+            if (level.getLevelNumber()==leverNumber){
+                return level ;
+                
+            }
         }
-        readObject.close();
-        return maze ;
-        
-        }
-        catch (ClassNotFoundException ex){
+        return null ;
+    }
+
+    public static ArrayList<Maze> mazesReader( String fileName) {
+        ArrayList<Maze> mazes = new ArrayList<Maze>();
+        ObjectInputStream readObjectS;
+        try {
+            readObjectS = new ObjectInputStream(new FileInputStream(fileName));
+            mazes = (ArrayList<Maze>) readObjectS.readObject();
+            readObjectS.close();
+
+            return mazes;
+
+        } catch (ClassNotFoundException ex) {
             System.err.println(ex.getMessage());
-            return null ;
-        }
-        catch(IOException ex){
+            return null;
+        } catch (IOException ex) {
             System.err.println(ex.getMessage());
-            return null ;
+            return null;
         }
-        
-        
-        
+
+    }
+    public static Maze mazeReader(int mazeNumber , String fileName){
+        ArrayList<Maze> mazes = mazesReader(fileName) ;
+        for (Maze maze :mazes){
+            if (maze.getGameNumber()==mazeNumber){
+                return maze ;
+                
+            }
+        }
+        return null ;
     }
     
-    public static int levelsReader (String fileName){
-        Level level ;
-        ObjectInputStream readObjectS ;
-        try{        
-         readObjectS = new ObjectInputStream(new FileInputStream(fileName)) ;
-         int number = (int) readObjectS.readObject() ;
-        readObjectS.close();
-        
-        return number ;
-        
-        }
-        catch (ClassNotFoundException ex){
+    public static int levelsNumberReader(String fileName) {
+        Level level;
+        ObjectInputStream readObjectS;
+        try {
+            readObjectS = new ObjectInputStream(new FileInputStream(fileName));
+            int number = (int) readObjectS.readObject();
+            readObjectS.close();
+
+            return number;
+
+        } catch (ClassNotFoundException ex) {
             System.err.println(ex.getMessage());
-            return  1 ;
-            
-        }
-        catch(IOException ex){
+            return 1;
+
+        } catch (IOException ex) {
             System.err.println(ex.getMessage());
-            return 1 ;
-            
+            return 1;
+
         }
-        
-        
-        
+
     }
 }

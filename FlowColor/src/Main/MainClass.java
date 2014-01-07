@@ -146,7 +146,7 @@ public class MainClass extends JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             int n = Integer.parseInt(JOptionPane.showInputDialog("enter game"));
-            Maze maze = GReader.gameReader(n, "myMazes.mqwe");
+            Maze maze = GReader.mazeReader(n, "myMazes.mqwe");
             this.gameGrid = new TheGamePanel(maze);
             gameGrid.addListener(new GirdGameListener());
             this.add(gameGrid, BorderLayout.CENTER);
@@ -214,7 +214,7 @@ public class MainClass extends JFrame {
             public void run() {
                 try{
                     int n = Integer.parseInt(JOptionPane.showInputDialog("enter game difficult"));
-                    new MainClass(GReader.levelsReader(n, "LevelFile.bin")).setVisible(true);
+                    new MainClass(GReader.levelReader(n,"LevelFile.bin")).setVisible(true);
                 }catch(NumberFormatException e){
                     System.exit(ABORT);
                 }                

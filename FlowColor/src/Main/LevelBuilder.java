@@ -175,9 +175,14 @@ public class LevelBuilder extends javax.swing.JFrame {
                 Dot dotsA [] = new Dot [dots.size()] ;
                 dots.toArray(dotsA) ;
                 System.out.println(dotsA.length);
-                levelNumber = GReader.levelsReader("LevelFile.bin") ;
+                //GWriter.levelsNumberWriter(++levelNumber, "LevelNumber.bin"); 
+                levelNumber = GReader.levelsNumberReader("LevelNumber.bin") ;          
+                System.out.println(levelNumber);
                 GWriter.levelsWriter(new Level(dotsA,null,null,level,levelNumber), "LevelFile.bin");
-                GWriter.levelsNumberWriter(++levelNumber, "LevelFile.bin");
+                ++levelNumber ;
+                GWriter.levelsNumberWriter(levelNumber, "LevelNumber.bin"); 
+                System.out.println(GReader.levelReader(--levelNumber, "LevelFile.bin").getLevelNumber());
+                //GWriter.levelsNumberWriter(++levelNumber, "LevelNumber.bin");
                 dots.removeAll(dots) ;
                 
                 

@@ -1,12 +1,13 @@
 package Componants;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  *
  * @author jasam + wissam
  */
-public class Maze {
+public class Maze implements Serializable{
 
     private static  int counter = 0 ;
     private final Cell[][] maze;

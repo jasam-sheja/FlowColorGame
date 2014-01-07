@@ -38,13 +38,13 @@ public class MakeMaze {
     
     public static void main(String[] args) {
     
-        MakeMaze maze = new MakeMaze() ;
-        Level level = maze.buildLevel() ;
-        GWriter.levelsWriter(level, "LevelTest.bin");
-        Level levelt = GReader.levelsReader(2, "LevelTest.bin");
-        System.out.println(levelt.getLength()); 
-        System.out.println(levelt.getLevelNumber());
-        
+//        MakeMaze maze = new MakeMaze() ;
+//        Level level = maze.buildLevel() ;
+//        GWriter.levelsWriter(level, "LevelTest.bin");
+//        Level levelt = GReader.levelsReader(2, "LevelFile.bin");
+//        System.out.println(levelt.getLength()); 
+//        System.out.println(levelt.getLevelNumber());
+          GWriter.levelsNumberWriter(1, "LevelNumber.bin");
     }
     
 }

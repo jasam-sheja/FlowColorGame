@@ -3,12 +3,13 @@ package Componants;
 import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
 /**
  *
  * @author jasam + wissam
  */
-public class Cell {
+public class Cell implements Serializable{
 
     public enum Side {
 
