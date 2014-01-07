@@ -400,8 +400,24 @@ public class CellPanel extends javax.swing.JPanel {
     public void setDrawDot(boolean drawDot) {
         this.drawDot = drawDot;
     }
-    private final boolean drawBridge;
-    private final boolean drawHall;
+    private boolean drawBridge;
+
+    public boolean isDrawBridge() {
+        return drawBridge;
+    }
+
+    public void setDrawBridge(boolean drawBridge) {
+        this.drawBridge = drawBridge;
+    }
+
+    public boolean isDrawHall() {
+        return drawHall;
+    }
+
+    public void setDrawHall(boolean drawHall) {
+        this.drawHall = drawHall;
+    }
+    private boolean drawHall;
 
     //colors of the pipes
     Color colorHorizental;

@@ -5,6 +5,8 @@
  */
 package Main;
 
+import Componants.Bridge;
+import Componants.Hall ;
 import Componants.CellPanel;
 import Componants.Dot;
 import Componants.Level;
@@ -25,8 +27,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import InputOutFiles.GWriter ;
-
+import InputOutFiles.GWriter;
 
 /**
  *
@@ -40,14 +41,18 @@ public class LevelBuilder extends javax.swing.JFrame {
     private TheBuilderPanel panel;
     private JButton color;
     private JButton build;
+    private JButton hole;
+    private JButton bridge;
     static private JColorChooser colorChooser;
     private JPanel colorGUI;
     private static int level;
-    private ArrayList<Dot> dots= new ArrayList<Dot>() ;
-    private int levelNumber =0  ;
+    private ArrayList<Dot> dots = new ArrayList<Dot>();
+    private int levelNumber = 0;
+    private boolean holePrased ;
+    private boolean bridgePrased ;
     
     
-
+    
     public LevelBuilder() {
         //initComponents();
         initMyComponents();
@@ -68,12 +73,12 @@ public class LevelBuilder extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -83,13 +88,20 @@ public class LevelBuilder extends javax.swing.JFrame {
         this.setTitle("GameBuilder");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(300, 350);
+        this.setSize(300, 360);
         this.setResizable(false);
         this.add(panel, BorderLayout.CENTER);
         JPanel southPanel = new JPanel(true);
         southPanel.add(color);
         southPanel.add(build);
+        southPanel.add(hole);
+        southPanel.add(bridge);
         this.add(southPanel, BorderLayout.SOUTH);
+//        JPanel eastPanel =  new JPanel(true) ;
+//        eastPanel.add(hole) ;
+//        eastPanel.add(bridge) ;
+//        this.add(eastPanel,BorderLayout.NORTH);
+
     }
 
     private void initMyComponents() {
@@ -105,6 +117,35 @@ public class LevelBuilder extends javax.swing.JFrame {
                     Color colors;
                     mybuttons = (CellPanel[][]) evt.getOldValue();
                     colors = colorChooser.getColor();
+                    if ((holePrased)&&(!butten.isDrawDot())&&(!butten.isDrawBridge())){
+                        if (butten.isDrawHall()){
+                            butten.setDrawHall(false);
+                            hole.setEnabled(true);
+                            holePrased = true ;
+                            holePrased = false ;
+                        }
+                        else{
+                            butten.setDrawHall(true);
+                            holePrased = true ;
+                        }
+                        
+                        
+                    }
+                    else if((bridgePrased)&&(!butten.isDrawDot())&&(!butten.isDrawHall())){
+                        if (butten.isDrawBridge()){
+                            butten.setDrawBridge(false);
+                            bridge.setEnabled(true);
+                             bridgePrased = false ;
+                        }
+                        else{
+                            butten.setDrawBridge(true);
+                            bridgePrased = true ;
+                        }
+                        
+                        
+                    
+                    }
+                    else if ((!bridgePrased)&&(!holePrased)&&(!butten.isDrawBridge())&&(!butten.isDrawHall())){
                     if (getColorNumber(mybuttons, colors) == 0) {
                         if (!butten.isDrawDot()) {
                             butten.setDrawDot(true);
@@ -130,6 +171,7 @@ public class LevelBuilder extends javax.swing.JFrame {
                             color.setEnabled(true);
                         }
                     }
+                    }
                 }
 
             }
@@ -154,49 +196,54 @@ public class LevelBuilder extends javax.swing.JFrame {
         colorGUI = new JPanel(new BorderLayout(2, 2));
         colorGUI.add(tempP, BorderLayout.CENTER);
         build = new JButton("Build");
-        
+
         build.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { 
+            public void actionPerformed(ActionEvent e) {
                 CellPanel[][] mybuttons = panel.getMybuttons();
-                for (int i=0 ; i<mybuttons.length;i++){
-                    for (int j=0 ; j< mybuttons[0].length ; j++){
-                        if (mybuttons[i][j].isDrawDot())
-                        {
-                            dots.add(new Dot(mybuttons[i][j].getColor(true),i,j));
+                Bridge bridgeS = null ;
+                Hall holeS =  null ;
+                for (int i = 0; i < mybuttons.length; i++) {
+                    for (int j = 0; j < mybuttons[0].length; j++) {
+                        if (mybuttons[i][j].isDrawDot()) {
+                            dots.add(new Dot(mybuttons[i][j].getColor(true), i, j));
                             mybuttons[i][j].setDrawDot(false);
                             mybuttons[i][j].setColor(null);
                         }
+                        else if (mybuttons[i][j].isDrawBridge()){
+                            bridgeS= new Bridge(i, j) ;
+                            mybuttons[i][j].setDrawBridge(false);
+                            
+                        }
+                        else if (mybuttons[i][j].isDrawHall()){
+                            holeS = new Hall(i, j) ;
+                            mybuttons[i][j].setDrawHall(false);
+                        }
                     }
-                
+
                 }
-                System.out.println(dots.size());
-                connectDots(dots) ;
-                Dot dotsA [] = new Dot [dots.size()] ;
-                dots.toArray(dotsA) ;
-                System.out.println(dotsA.length);
-                //GWriter.levelsNumberWriter(++levelNumber, "LevelNumber.bin"); 
-                levelNumber = GReader.levelsNumberReader("LevelNumber.bin") ;          
+                
+                connectDots(dots);
+                Dot dotsA[] = new Dot[dots.size()];
+                dots.toArray(dotsA);
+                levelNumber = GReader.levelsNumberReader("LevelNumber.bin");
                 System.out.println(levelNumber);
-                GWriter.levelsWriter(new Level(dotsA,null,null,level,levelNumber), "LevelFile.bin");
-                ++levelNumber ;
-                GWriter.levelsNumberWriter(levelNumber, "LevelNumber.bin"); 
-                System.out.println(GReader.levelReader(--levelNumber, "LevelFile.bin").getLevelNumber());
-                //GWriter.levelsNumberWriter(++levelNumber, "LevelNumber.bin");
-                dots.removeAll(dots) ;
-                
-                
-                
+                GWriter.levelsWriter(new Level(dotsA, bridgeS, holeS, level, levelNumber), "LevelFile.bin");
+                System.out.println(levelNumber);
+                ++levelNumber;
+                GWriter.levelsNumberWriter(levelNumber, "LevelNumber.bin");
+                dots.removeAll(dots);
+
             }
 
             private void connectDots(ArrayList<Dot> dots) {
-                for (Dot dot : dots){
-                    for (Dot dot2 : dots){
-                        if ((dot.color ==dot2.color)&&(dot !=dot2)){
+                for (Dot dot : dots) {
+                    for (Dot dot2 : dots) {
+                        if ((dot.color == dot2.color) && (dot != dot2)) {
                             dot.connectDots(dot2);
                         }
                     }
-                
+
                 }
             }
         });
@@ -209,9 +256,29 @@ public class LevelBuilder extends javax.swing.JFrame {
             }
         });
 
+        hole = new JButton("Hole");
+        hole.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                holePrased = true ;
+                hole.setEnabled(false);
+            }
+        });
+
+        bridge = new JButton("Bridge");
+        bridge.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bridgePrased =  true ;
+                bridge.setEnabled(false);
+            }
+        });
+
     }
-    
-    private PropertyChangeSupport changeSupport;
+
 
     /**
      * @param args the command line arguments
@@ -258,7 +325,6 @@ public class LevelBuilder extends javax.swing.JFrame {
                         System.err.println("wrong in level input");
                         return;
                     }
-                    
 
                 } catch (Exception ex) {
                     return;

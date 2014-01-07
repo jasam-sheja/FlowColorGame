@@ -11,8 +11,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Componants.Maze;
+import static java.awt.image.ImageObserver.ABORT;
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -47,6 +49,8 @@ public class GReader {
                 
             }
         }
+        JOptionPane.showMessageDialog(null, "sry no such level");
+        System.exit(ABORT);
         return null ;
     }
 
@@ -77,6 +81,8 @@ public class GReader {
                 
             }
         }
+        JOptionPane.showMessageDialog(null, "sry no such level");
+        System.exit(ABORT);
         return null ;
     }
     
