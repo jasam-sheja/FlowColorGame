@@ -1,18 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package InputOutFiles;
 
-import Componants.Dot;
 import Componants.Level;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Componants.Maze;
 import static java.awt.image.ImageObserver.ABORT;
-import java.io.BufferedInputStream;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -22,8 +15,8 @@ import javax.swing.JOptionPane;
  */
 public class GReader {
 
-    public static ArrayList<Level> levelsReader( String fileName) {
-        ArrayList<Level> levels = new ArrayList<Level>();
+    public static ArrayList<Level> levelsReader(String fileName) {
+        ArrayList<Level> levels;
         ObjectInputStream readObjectS;
         try {
             readObjectS = new ObjectInputStream(new FileInputStream(fileName));
@@ -32,30 +25,28 @@ public class GReader {
 
             return levels;
 
-        } catch (ClassNotFoundException ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        } catch (IOException ex) {
+        } catch (ClassNotFoundException | IOException ex) {
             System.err.println(ex.getMessage());
             return null;
         }
 
     }
-    public static Level levelReader(int leverNumber , String fileName){
-        ArrayList<Level> levels = levelsReader(fileName) ;
-        for (Level level :levels){
-            if (level.getLevelNumber()==leverNumber){
-                return level ;
-                
+
+    public static Level levelReader(int leverNumber, String fileName) {
+        ArrayList<Level> levels = levelsReader(fileName);
+        for (Level level : levels) {
+            if (level.getLevelNumber() == leverNumber) {
+                return level;
+
             }
         }
         JOptionPane.showMessageDialog(null, "sry no such level");
         System.exit(ABORT);
-        return null ;
+        return null;
     }
 
-    public static ArrayList<Maze> mazesReader( String fileName) {
-        ArrayList<Maze> mazes = new ArrayList<Maze>();
+    public static ArrayList<Maze> mazesReader(String fileName) {
+        ArrayList<Maze> mazes;
         ObjectInputStream readObjectS;
         try {
             readObjectS = new ObjectInputStream(new FileInputStream(fileName));
@@ -64,28 +55,26 @@ public class GReader {
 
             return mazes;
 
-        } catch (ClassNotFoundException ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        } catch (IOException ex) {
+        } catch (ClassNotFoundException | IOException ex) {
             System.err.println(ex.getMessage());
             return null;
         }
 
     }
-    public static Maze mazeReader(int mazeNumber , String fileName){
-        ArrayList<Maze> mazes = mazesReader(fileName) ;
-        for (Maze maze :mazes){
-            if (maze.getGameNumber()==mazeNumber){
-                return maze ;
-                
+
+    public static Maze mazeReader(int mazeNumber, String fileName) {
+        ArrayList<Maze> mazes = mazesReader(fileName);
+        for (Maze maze : mazes) {
+            if (maze.getGameNumber() == mazeNumber) {
+                return maze;
+
             }
         }
         JOptionPane.showMessageDialog(null, "sry no such level");
         System.exit(ABORT);
-        return null ;
+        return null;
     }
-    
+
     public static int levelsNumberReader(String fileName) {
         Level level;
         ObjectInputStream readObjectS;
@@ -96,11 +85,7 @@ public class GReader {
 
             return number;
 
-        } catch (ClassNotFoundException ex) {
-            System.err.println(ex.getMessage());
-            return 1;
-
-        } catch (IOException ex) {
+        } catch (ClassNotFoundException | IOException ex) {
             System.err.println(ex.getMessage());
             return 1;
 

@@ -19,6 +19,22 @@ public class CellPanel extends javax.swing.JPanel {
                 color, color);
     }
 
+    /**
+     *
+     * @param rowIndex the row position of the cell in maze
+     * @param colomunIndex the column position or the cell in maze
+     * @param drawDot does the cell has cell
+     * @param drawBridge does the cell has bridge
+     * @param drawHall is the cell a hall
+     * @param drawUp is there a up pipe
+     * @param drawDown is there a down pipe
+     * @param drawRight is there a right pipe
+     * @param drawLeft is there a left pipe
+     * @param verticalColor the color of the vertical pipes if there is bridge
+     * @param horizentalColor the default color of the pipes if there is no
+     * bridge and the color of the horizontal pipes if there one
+     *
+     */
     public CellPanel(int rowIndex, int colomunIndex, boolean drawUp, boolean drawDown, boolean drawRight, boolean drawLeft, boolean drawDot, boolean drawBridge, boolean drawHall, Color horizentalColor, Color verticalColor) {
         initComponents();
         this.rowIndex = rowIndex;
@@ -65,16 +81,28 @@ public class CellPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     // <editor-fold defaultstate="collapsed" desc="Indexes getting">
+    /**
+     * @return the row position of the cell
+     */
     public int getRowIndex() {
         return rowIndex;
     }
 
+    /**
+     * @return the column position of the cell
+     */
     public int getColomunIndex() {
         return colomunIndex;
     }
     // </editor-fold>  
 
     // <editor-fold defaultstate="collapsed" desc="Set pipes">  
+    /**
+     * set the up pipe drawing state
+     *
+     * @param drawUp true if to be drawn
+     * @param color the color of the pipe
+     */
     public void setDrawUp(boolean drawUp, Color color) {
         this.drawUp = drawUp;
         if (drawUp) {
@@ -86,6 +114,12 @@ public class CellPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * set the up pipe drawing state
+     *
+     * @param drawDown true if to be drawn
+     * @param color the color of the pipe
+     */
     public void setDrawDown(boolean drawDown, Color color) {
         this.drawDown = drawDown;
         if (drawDown) {
@@ -97,6 +131,12 @@ public class CellPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * set the up pipe drawing state
+     *
+     * @param drawRight true if to be drawn
+     * @param color the color of the pipe
+     */
     public void setDrawRight(boolean drawRight, Color color) {
         this.drawRight = drawRight;
         if (drawRight) {
@@ -108,6 +148,12 @@ public class CellPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * set the up pipe drawing state
+     *
+     * @param drawLeft true if to be drawn
+     * @param color the color of the pipe
+     */
     public void setDrawLeft(boolean drawLeft, Color color) {
         this.drawLeft = drawLeft;
         if (drawLeft) {
@@ -131,6 +177,9 @@ public class CellPanel extends javax.swing.JPanel {
         setSize(width);
     }
 
+    /**
+     * @param width the new width of the pipe
+     */
     public void setSize(int width) {
         super.setSize(width, width);
         super.setPreferredSize(new Dimension(width, width));
@@ -140,6 +189,12 @@ public class CellPanel extends javax.swing.JPanel {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Set Colors">  
+    /**
+     * set the color of the pipe depending on <code>horizental<\code>
+     *
+     * @param color
+     * @param horizental
+     */
     public final void setColor(Color color, boolean horizental) {
         if (horizental) {
             colorHorizental = color;
@@ -148,6 +203,12 @@ public class CellPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * should not use with hall or bridge
+     *
+     * @param color
+     * @throws IllegalArgumentException if the cell is hall or bridge
+     */
     public final void setColor(Color color) {
         if (drawBridge) {
             throw new IllegalArgumentException("unknow which color to assigne");
@@ -161,13 +222,22 @@ public class CellPanel extends javax.swing.JPanel {
     // </editor-fold>  
 
     // <editor-fold defaultstate="collapsed" desc="Get Colors">  
+    /**
+     *
+     * @param horizental
+     * @return the color depending on <code>horizental<\code>
+     */
     public final Color getColor(boolean horizental) {
         return horizental ? colorHorizental : colorVertical;
     }
 
     // </editor-fold>  
+    /**
+     * draws all
+     *
+     * @param g
+     */
     private void doDrawing(Graphics g) {
-
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setColor(Color.BLACK);
@@ -214,6 +284,11 @@ public class CellPanel extends javax.swing.JPanel {
     }
 
     // <editor-fold defaultstate="collapsed" desc="objects drawing methods">  
+    /**
+     * draw hall
+     *
+     * @param g2d
+     */
     private void drawHall(Graphics2D g2d) {
         int factor = Math.max(getSize().width, getSize().height);
         int width = 2 * factor / 3;
@@ -238,6 +313,9 @@ public class CellPanel extends javax.swing.JPanel {
         g2d.fillRoundRect(x, y, width, height, width, height);
     }
 
+    /**
+     * @param g2d
+     */
     private void drawDot(Graphics2D g2d) {
         int factor = Math.max(getSize().width, getSize().height);
 
@@ -251,6 +329,9 @@ public class CellPanel extends javax.swing.JPanel {
         g2d.fillRoundRect(x, y, width, height, width, height);
     }
 
+    /**
+     * @param g2d
+     */
     private void drawCross(Graphics2D g2d) {
         int x;
         int y;
@@ -291,6 +372,9 @@ public class CellPanel extends javax.swing.JPanel {
 
     }
 
+    /**
+     * @param g2d
+     */
     private void drawUpPipe(Graphics2D g2d) {
         int factor = Math.max(getSize().width, getSize().height);
         int width = factor / 3;
@@ -302,28 +386,37 @@ public class CellPanel extends javax.swing.JPanel {
         g2d.fillRect(x, y, width, height);
     }
 
+    /**
+     * @param g2d
+     */
     private void drawDownPipe(Graphics2D g2d) {
         int factor = Math.max(getSize().width, getSize().height);
         int width = factor / 3;
         int height = drawBridge ? factor : factor / 2 + width / 2;
         int x = factor / 2 - width / 2;
-        int y = factor / 2 - width / 2;
+        int y = drawBridge ? 0 : factor / 2 - width / 2;
         g2d.drawRect(x, y, width, height);
         g2d.setColor(colorVertical);
         g2d.fillRect(x, y, width, height);
     }
 
+    /**
+     * @param g2d
+     */
     private void drawRightPipe(Graphics2D g2d) {
         int factor = Math.max(getSize().width, getSize().height);
         int height = factor / 3;
         int width = drawBridge ? factor : factor / 2 + height / 2;
-        int x = factor / 2 - height / 2;
+        int x = drawBridge ? 0 : factor / 2 - height / 2;
         int y = factor / 2 - height / 2;
         g2d.drawRect(x, y, width, height);
         g2d.setColor(colorHorizental);
         g2d.fillRect(x, y, width, height);
     }
 
+    /**
+     * @param g2d
+     */
     private void drawLeftPipe(Graphics2D g2d) {
         int factor = Math.max(getSize().width, getSize().height);
         int height = factor / 3;

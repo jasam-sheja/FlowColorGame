@@ -6,7 +6,7 @@
 package Main;
 
 import Componants.Bridge;
-import Componants.Hall ;
+import Componants.Hall;
 import Componants.CellPanel;
 import Componants.Dot;
 import Componants.Level;
@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import InputOutFiles.GWriter;
 
@@ -43,18 +42,15 @@ public class LevelBuilder extends javax.swing.JFrame {
     private JButton build;
     private JButton hole;
     private JButton bridge;
-    private JButton remover ;
+    private JButton remover;
     static private JColorChooser colorChooser;
     private JPanel colorGUI;
     private static int level;
-    private ArrayList<Dot> dots = new ArrayList<Dot>();
+    private final ArrayList<Dot> dots = new ArrayList<>();
     private int levelNumber = 0;
-    private boolean holePrased ;
-    private boolean bridgePrased ;
-    
-    
-    
-    
+    private boolean holePrased;
+    private boolean bridgePrased;
+
     public LevelBuilder() {
         //initComponents();
         initMyComponents();
@@ -94,13 +90,13 @@ public class LevelBuilder extends javax.swing.JFrame {
         this.setResizable(false);
         this.add(panel, BorderLayout.CENTER);
         JPanel southPanel = new JPanel(true);
-        JPanel northPanel =  new JPanel(true);
+        JPanel northPanel = new JPanel(true);
         southPanel.add(color);
         northPanel.add(build);
         southPanel.add(hole);
-        northPanel.add(remover) ;
+        northPanel.add(remover);
         southPanel.add(bridge);
-        this.add(northPanel, BorderLayout.NORTH) ;
+        this.add(northPanel, BorderLayout.NORTH);
         this.add(southPanel, BorderLayout.SOUTH);
 //        JPanel eastPanel =  new JPanel(true) ;
 //        eastPanel.add(hole) ;
@@ -115,68 +111,61 @@ public class LevelBuilder extends javax.swing.JFrame {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                CellPanel butten = null;
-                if (evt.getPropertyName() == "MatrixAndColor") {
+                CellPanel butten;
+                if ("MatrixAndColor".equalsIgnoreCase(evt.getPropertyName())) {
                     CellPanel[][] mybuttons;
                     butten = (CellPanel) evt.getNewValue();
                     Color colors;
                     mybuttons = (CellPanel[][]) evt.getOldValue();
                     colors = colorChooser.getColor();
-                   if ((!hole.isEnabled())&&(!butten.isDrawDot())&&(!butten.isDrawBridge())){
-                        if (butten.isDrawHall()){
+                    if ((!hole.isEnabled()) && (!butten.isDrawDot()) && (!butten.isDrawBridge())) {
+                        if (butten.isDrawHall()) {
                             butten.setDrawHall(false);
                             hole.setEnabled(true);
-                            holePrased = false ;
-                        }
-                        else if (holePrased){
+                            holePrased = false;
+                        } else if (holePrased) {
                             butten.setDrawHall(true);
                             hole.setEnabled(false);
-                            holePrased = false ;
+                            holePrased = false;
                         }
-                    }
-                    else if((!bridge.isEnabled())&&(!butten.isDrawDot())&&(!butten.isDrawHall())){
-                        if (butten.isDrawBridge()){
+                    } else if ((!bridge.isEnabled()) && (!butten.isDrawDot()) && (!butten.isDrawHall())) {
+                        if (butten.isDrawBridge()) {
                             butten.setDrawBridge(false);
                             bridge.setEnabled(true);
-                            bridgePrased = false ;
-                            
-                           
-                        }
-                        else if (bridgePrased){
+                            bridgePrased = false;
+
+                        } else if (bridgePrased) {
                             butten.setDrawBridge(true);
                             bridge.setEnabled(false);
-                            bridgePrased = false ;
+                            bridgePrased = false;
                         }
-                        
-                        
-                    
-                    }
-                    else if ((!bridgePrased)&&(!holePrased)&&(!butten.isDrawBridge())&&(!butten.isDrawHall())){
-                    if (getColorNumber(mybuttons, colors) == 0) {
-                        if (!butten.isDrawDot()) {
-                            butten.setDrawDot(true);
-                            butten.setColor(colors);
-                            color.setEnabled(false);
+
+                    } else if ((!bridgePrased) && (!holePrased) && (!butten.isDrawBridge()) && (!butten.isDrawHall())) {
+                        if (getColorNumber(mybuttons, colors) == 0) {
+                            if (!butten.isDrawDot()) {
+                                butten.setDrawDot(true);
+                                butten.setColor(colors);
+                                color.setEnabled(false);
+                            }
+                        } else if (getColorNumber(mybuttons, colors) == 2) {
+                            if (butten.isDrawDot() && (colors == butten.getColor(true))) {
+                                butten.setDrawDot(false);
+                                butten.setColor(null);
+                                color.setEnabled(false);
+                            } else {
+                                color.setEnabled(true);
+                            }
+                        } else if (getColorNumber(mybuttons, colors) == 1) {
+                            if ((butten.isDrawDot()) && (colors == butten.getColor(true))) {
+                                butten.setDrawDot(false);
+                                butten.setColor(null);
+                                color.setEnabled(true);
+                            } else {
+                                butten.setDrawDot(true);
+                                butten.setColor(colors);
+                                color.setEnabled(true);
+                            }
                         }
-                    } else if (getColorNumber(mybuttons, colors) == 2) {
-                        if (butten.isDrawDot() && (colors == butten.getColor(true))) {
-                            butten.setDrawDot(false);
-                            butten.setColor(null);
-                            color.setEnabled(false);
-                        } else {
-                            color.setEnabled(true);
-                        }
-                    } else if (getColorNumber(mybuttons, colors) == 1) {
-                        if ((butten.isDrawDot()) && (colors == butten.getColor(true))) {
-                            butten.setDrawDot(false);
-                            butten.setColor(null);
-                            color.setEnabled(true);
-                        } else {
-                            butten.setDrawDot(true);
-                            butten.setColor(colors);
-                            color.setEnabled(true);
-                        }
-                    }
                     }
                 }
 
@@ -184,9 +173,9 @@ public class LevelBuilder extends javax.swing.JFrame {
 
             private int getColorNumber(CellPanel[][] mybuttons, Color color) {
                 int number = 0;
-                for (int i = 0; i < mybuttons.length; i++) {
+                for (CellPanel[] mybutton : mybuttons) {
                     for (int j = 0; j < mybuttons[0].length; j++) {
-                        if (mybuttons[i][j].getColor(true) == color) {
+                        if (mybutton[j].getColor(true) == color) {
                             number++;
                         }
                     }
@@ -207,28 +196,26 @@ public class LevelBuilder extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CellPanel[][] mybuttons = panel.getMybuttons();
-                Bridge bridgeS = null ;
-                Hall holeS =  null ;
+                Bridge bridgeS = null;
+                Hall holeS = null;
                 for (int i = 0; i < mybuttons.length; i++) {
                     for (int j = 0; j < mybuttons[0].length; j++) {
                         if (mybuttons[i][j].isDrawDot()) {
                             dots.add(new Dot(mybuttons[i][j].getColor(true), i, j));
                             mybuttons[i][j].setDrawDot(false);
                             mybuttons[i][j].setColor(null);
-                        }
-                        else if (mybuttons[i][j].isDrawBridge()){
-                            bridgeS= new Bridge(i, j) ;
+                        } else if (mybuttons[i][j].isDrawBridge()) {
+                            bridgeS = new Bridge(i, j);
                             mybuttons[i][j].setDrawBridge(false);
-                            
-                        }
-                        else if (mybuttons[i][j].isDrawHall()){
-                            holeS = new Hall(i, j) ;
+
+                        } else if (mybuttons[i][j].isDrawHall()) {
+                            holeS = new Hall(i, j);
                             mybuttons[i][j].setDrawHall(false);
                         }
                     }
 
                 }
-                
+
                 connectDots(dots);
                 Dot dotsA[] = new Dot[dots.size()];
                 dots.toArray(dotsA);
@@ -257,6 +244,7 @@ public class LevelBuilder extends javax.swing.JFrame {
         color = new JButton("Color");
 
         color.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JOptionPane.showMessageDialog(null, colorGUI);
             }
@@ -268,7 +256,7 @@ public class LevelBuilder extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                holePrased = true ;
+                holePrased = true;
                 hole.setEnabled(false);
             }
         });
@@ -278,11 +266,11 @@ public class LevelBuilder extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                bridgePrased =  true ;
+                bridgePrased = true;
                 bridge.setEnabled(false);
             }
         });
-        remover =  new JButton("Remove") ;
+        remover = new JButton("Remove");
         remover.addActionListener(new ActionListener() {
 
             @Override
@@ -293,7 +281,6 @@ public class LevelBuilder extends javax.swing.JFrame {
         });
 
     }
-
 
     /**
      * @param args the command line arguments
@@ -311,37 +298,27 @@ public class LevelBuilder extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LevelBuilder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LevelBuilder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LevelBuilder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(LevelBuilder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
+                    level = Integer.parseInt(JOptionPane.showInputDialog("plz enter the level"));
                     try {
-                        level = Integer.parseInt(JOptionPane.showInputDialog("plz enter the level"));
-                        try {
-                            if ((level < 5)) {
-                                throw new IllegalArgumentException();
-                            }
-                        } catch (Exception ex) {
-                            System.err.println("wrong in level input number");
-                            return;
+                        if ((level < 5)) {
+                            throw new IllegalArgumentException();
                         }
-                    } catch (Exception ex) {
-                        System.err.println("wrong in level input");
+                    } catch (IllegalArgumentException ex) {
+                        System.err.println("wrong in level input number");
                         return;
                     }
-
-                } catch (Exception ex) {
+                } catch (NumberFormatException ex) {
+                    System.err.println("wrong in level input");
                     return;
                 }
 

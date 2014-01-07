@@ -8,49 +8,50 @@ import java.util.Comparator;
  *
  * @author jasam + wissam
  */
-public class Dot implements Serializable{
+public class Dot implements Serializable {
+
     public Color color;
     public int x;
     public int y;
     public boolean isStart;
     public Dot next;
+
     public Dot(Color color, int x, int y) {
         this.color = color;
         this.x = x;
         this.y = y;
         this.isStart = false;
     }
-    public Dot(Color color, int x, int y,Color color2, int x2, int y2) {
+
+    public Dot(Color color, int x, int y, Color color2, int x2, int y2) {
         this.color = color;
         this.x = x;
         this.y = y;
         this.isStart = false;
         this.next = new Dot(color2, x2, y2);
-        this.next.next = this;
+        this.next.next = this;//i know
     }
-    
-    public void connectDots(Dot dot)
-    {
-            this.next = dot ;
-            this.next.next = this ;
+
+    public void connectDots(Dot dot) {
+        this.next = dot;
+        this.next.next = this;
     }
 }
 
-
-
-class DotCompByPosition implements Comparator<Dot>{
+class DotCompByPosition implements Comparator<Dot> {
 
     @Override
     public int compare(Dot o1, Dot o2) {
-        if(o1.x > o2.x)
+        if (o1.x > o2.x) {
             return 1;
-        else if(o1.x < o2.x)
+        } else if (o1.x < o2.x) {
             return -1;
-        else if(o1.y > o2.y)
+        } else if (o1.y > o2.y) {
             return 1;
-        else if(o1.y < o2.y)
+        } else if (o1.y < o2.y) {
             return -1;
-        else
-            return 0;            
-    }    
+        } else {
+            return 0;
+        }
+    }
 }

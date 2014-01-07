@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import static java.awt.image.ImageObserver.ABORT;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -25,7 +26,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author DigitalNet
+ * @author jasam sheja A.K.A ammar
  */
 public class MainClass extends JFrame {
 
@@ -34,13 +35,21 @@ public class MainClass extends JFrame {
     private Timer timer;
     private Level level;
 
+    /**
+     *
+     * @param level the level we want to play
+     */
     public MainClass(Level level) {
         initMyComponent(level);
         initComponents();
         loadPlayers();
         timer.start();
     }
-    
+
+    /**
+     * 
+     * @param maze the maze we want to play
+     */
     public MainClass(Maze maze) {
         initMyComponent(maze);
         initComponents();
@@ -56,18 +65,24 @@ public class MainClass extends JFrame {
         this.setSize(300, 390);
         this.setResizable(false);
 
-        this.add(gameGrid, BorderLayout.CENTER);
-
         undoButton = new JButton("undo");
         undoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gameGrid.getGameControllar().undo();
-                gameGrid.increaseMoves();
-                gameGrid.repaint();
+                if (gameGrid.getGameControllar().undo()) {
+                    gameGrid.increaseMoves();
+                    gameGrid.repaint();
+                }
             }
         });
         homeButton = new JButton("home");
+        homeButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                homeButtonActionPerformed(e);
+            }
+        });
         movesLabel = new JLabel("moves 0");
         timer = new Timer(1000, new CountUpTimer());
         timerLabel = new JLabel("time " + timeStarted);
@@ -132,26 +147,53 @@ public class MainClass extends JFrame {
         });
     }// </editor-fold> 
 
+    /**
+     * set my component according to <code>level<\code>
+     * @param level 
+     */
     private void initMyComponent(Level level) {
         this.level = level;
         gameGrid = new TheGamePanel(level);
         gameGrid.addListener(new GirdGameListener());
+        this.add(gameGrid, BorderLayout.CENTER);
     }
+
+    /**
+     * set my component according to <code>newMaze<\code>
+     * @param newMaze 
+     */
     private void initMyComponent(Maze newMaze) {
         this.level = newMaze.getLevel();
         gameGrid = new TheGamePanel(newMaze);
         gameGrid.addListener(new GirdGameListener());
+        this.gameGrid.updateDrawing();
+        this.add(gameGrid, BorderLayout.CENTER);
+    }
+
+    private void homeButtonActionPerformed(ActionEvent e) {
+        this.setVisible(false);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int n = Integer.parseInt(JOptionPane.showInputDialog("enter game difficult"));
+                    new MainClass(GReader.levelReader(n, "LevelTest.bin")).setVisible(true);
+                } catch (NumberFormatException e) {
+                    System.exit(ABORT);
+                }
+            }
+        });
+        this.dispose();
     }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             int n = Integer.parseInt(JOptionPane.showInputDialog("enter game"));
             Maze maze = GReader.mazeReader(n, "myMazes.mqwe");
-            this.gameGrid = new TheGamePanel(maze);
-            gameGrid.addListener(new GirdGameListener());
-            this.add(gameGrid, BorderLayout.CENTER);
+            this.remove(gameGrid);
+            initMyComponent(maze);
         } catch (NumberFormatException e) {
-
         }
     }
 
@@ -166,7 +208,7 @@ public class MainClass extends JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {
         String str = "rank  Name         Time    Moves";
-        int i=1;
+        int i = 1;
         for (Player player : players) {
             str += "\n" + i++ + "        " + player.getName() + "         \t" + player.getTime() + "         \t" + player.getMoves();
         }
@@ -212,12 +254,12 @@ public class MainClass extends JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     int n = Integer.parseInt(JOptionPane.showInputDialog("enter game difficult"));
-                    new MainClass(GReader.levelReader(n,"LevelFile.bin")).setVisible(true);
-                }catch(NumberFormatException e){
+                    new MainClass(GReader.levelReader(n, "LevelFile.bin")).setVisible(true);
+                } catch (NumberFormatException e) {
                     System.exit(ABORT);
-                }                
+                }
             }
         });
     }

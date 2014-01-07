@@ -22,12 +22,15 @@ public class GWriter {
 
         ObjectOutputStream writeObject;
         try {
-            ArrayList<Level> levels = new ArrayList<Level>();
+            ArrayList<Level> levels = new ArrayList<>();
             File file = new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();
             } else {
                 levels = GReader.levelsReader(fileName);
+            }
+            if (levels == null) {
+                levels = new ArrayList<>();
             }
             writeObject = new ObjectOutputStream(new FileOutputStream(file));
             levels.add(level);
@@ -40,23 +43,24 @@ public class GWriter {
         }
 
     }
+
     public static void levelsRemover(int levelnumber, String fileName) {
 
         ObjectOutputStream writeObject;
         try {
-            Level level=null ;
-            ArrayList<Level> levels = new ArrayList<Level>();
+            Level level = null;
+            ArrayList<Level> levels = new ArrayList<>();
             File file = new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();
             } else {
-                level = GReader.levelReader(levelnumber, fileName) ;
+                level = GReader.levelReader(levelnumber, fileName);
             }
-            if (level==null){
+            if (level == null) {
                 JOptionPane.showMessageDialog(null, "sry no such level");
-                 System.exit(ABORT);
+                System.exit(ABORT);
             }
-                
+
             writeObject = new ObjectOutputStream(new FileOutputStream(file));
             levels.remove(level);
             writeObject.writeObject(levels);
@@ -69,21 +73,19 @@ public class GWriter {
 
     }
 
-
     public static void gameWriter(Maze maze, String fileName) {
 
         ObjectOutputStream writeObject;
         try {
-            ArrayList<Maze> mazes = new ArrayList<Maze>();
+            ArrayList<Maze> mazes = new ArrayList<>();
             File file = new File(fileName);
             if (!file.exists()) {
                 file.createNewFile();
-            }
-            else{
+            } else {
                 mazes = GReader.mazesReader(fileName);
             }
             writeObject = new ObjectOutputStream(new FileOutputStream(file));
-            mazes.add(maze) ;
+            mazes.add(maze);
             writeObject.writeObject(mazes);
 
             writeObject.flush();

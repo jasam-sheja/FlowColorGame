@@ -1,4 +1,3 @@
-
 package Componants;
 
 import java.io.Serializable;
@@ -7,7 +6,8 @@ import java.io.Serializable;
  *
  * @author jasam + wissam
  */
-public class Bridge implements Serializable{
+public class Bridge implements Serializable {
+
     public int x;
     public int y;
 
@@ -15,5 +15,5 @@ public class Bridge implements Serializable{
         this.x = x;
         this.y = y;
     }
-    
+
 }

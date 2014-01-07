@@ -1,49 +1,40 @@
 package Componants;
 
-/**
- *
- * @author DigitalNet
- */
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import InputOutFiles.*;
 import java.beans.PropertyChangeSupport;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
+ * here we we have the cell net and the controller  
  * @author jasam sheja
  */
 public class TheGamePanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form testJtable
+     *
+     * @param level the level we want to play
      */
-
     public TheGamePanel(Level level) {
         this.level = level;
         gc = new GameControllar(level);
         initMyComponents();
         initComponents();
     }
-    
+
+    /**
+     * 
+     * @param maze the maze we want to play
+     */
     public TheGamePanel(Maze maze) {
         this.level = maze.getLevel();
         gc = new GameControllar(maze);
         initMyComponents();
         initComponents();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,7 +45,7 @@ public class TheGamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        Dot []dots = level.getDots();
+        Dot[] dots = level.getDots();
         mybuttons = new CellPanel[level.getLength()][level.getLength()];
         int k = 0;
         for (int l = 0; l < mybuttons.length; l++) {
@@ -76,7 +67,7 @@ public class TheGamePanel extends javax.swing.JPanel {
                     public void mouseEntered(java.awt.event.MouseEvent evt) {
                         if (ismousePressed) {
                             canAdd = (Math.abs(mybuttons[fi][fj].getRowIndex() - i0) + Math.abs(mybuttons[fi][fj].getColomunIndex() - j0)) == 1;
-                            if(canAdd){
+                            if (canAdd) {
                                 try {
                                     if (!gc.add(mybuttons[fi][fj].getRowIndex(), mybuttons[fi][fj].getColomunIndex(), i0, j0)) {
                                         canAdd = false;
@@ -87,7 +78,7 @@ public class TheGamePanel extends javax.swing.JPanel {
                                     }
                                 }
                             }
-                        } 
+                        }
                     }
 
                     @Override
@@ -105,21 +96,23 @@ public class TheGamePanel extends javax.swing.JPanel {
                             gc.saveState();
                             i0 = mybuttons[fi][fj].getRowIndex();
                             j0 = mybuttons[fi][fj].getColomunIndex();
-                            if((newMove = color != mybuttons[fi][fj].getColor(true)))
+                            if ((newMove = color != mybuttons[fi][fj].getColor(true))) {
                                 color = mybuttons[fi][fj].getColor(true);
-                            canAdd = color!=null;
-                            if(canAdd)
-                                gc.clearPath(i0, j0);                            
+                            }
+                            canAdd = color != null;
+                            if (canAdd) {
+                                gc.clearPath(i0, j0);
+                            }
                         }
                     }
 
                     @Override
                     public void mouseReleased(java.awt.event.MouseEvent evt) {
                         if (evt.getButton() == MouseEvent.BUTTON1) {
-                            if(changeSupport!=null && newMove){
+                            if (changeSupport != null && newMove) {
                                 changeSupport.firePropertyChange("MOVES", moves++, moves);
                             }
-                                
+
                             i0 = -10;
                             j0 = -10;
                             ismousePressed = false;
@@ -131,7 +124,6 @@ public class TheGamePanel extends javax.swing.JPanel {
             }
         }
 
-        
         this.setBackground(Color.DARK_GRAY);
         GridLayout gridLayout = new GridLayout(mybuttons.length, mybuttons.length, 0, 0);
         this.setLayout(gridLayout);
@@ -140,18 +132,17 @@ public class TheGamePanel extends javax.swing.JPanel {
                 this.add(button);
             }
         }
-        
+
         moves = 0;
 
     }// </editor-fold>                        
 
+    
     private void initMyComponents() {
-        Dot[] dots =  level.getDots() ;
-        
-        for (int i = 0; i < gc.CellsPerRow(); i++) {
-            final int fi = i;
-            for (int j = 0; j < gc.CellsPerRow(); j++) {
-                final int fj = j;
+        for (int l = 0; l < gc.CellsPerRow(); l++) {
+            final int fi = l;
+            for (int m = 0; m < gc.CellsPerRow(); m++) {
+                final int fj = m;
 //                Cell cell = cells[i][j];
                 gc.addPropertyChangeListner(new PropertyChangeListener() {
                     @Override
@@ -163,7 +154,7 @@ public class TheGamePanel extends javax.swing.JPanel {
                                 || state == Cell.State.CROSS_LEAVED
                                 || state == Cell.State.LEAVED;
                         Color color = null;
-                        switch (evt.getPropertyName()) {
+                        switch (evt.getPropertyName().toUpperCase()) {
                             case "UP":
                                 if (hasPipe) {
                                     color = thecell.getColor(Cell.Side.UP);
@@ -190,25 +181,25 @@ public class TheGamePanel extends javax.swing.JPanel {
                                 break;
                         }
                     }
-                }, i, j);
+                }, l, m);
             }
         }
         gc.addPropertyChangeListner(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName().equalsIgnoreCase("unfilled")){
+                if (evt.getPropertyName().equalsIgnoreCase("unfilled")) {
                     changeSupport.firePropertyChange("finished", false, true);
-                }else if(evt.getPropertyName().equalsIgnoreCase("maze")){
-                    int length = ((Maze)evt.getNewValue()).getLength();
+                } else if (evt.getPropertyName().equalsIgnoreCase("maze")) {
+                    int length = ((Maze) evt.getNewValue()).getLength();
                     for (int k = 0; k < length; k++) {
                         for (int l = 0; l < length; l++) {
                             Cell theCell = ((Maze) evt.getNewValue()).getCellAt(k, l);
-                            
-                            boolean up = false,down = false,left = false,right = false;
+
+                            boolean up = false, down = false, left = false, right = false;
                             Cell.Side side = theCell.getEntered(true);
-                            if(side != null)
-                                switch(side){
+                            if (side != null) {
+                                switch (side) {
                                     case RIGHT:
                                         right = true;
                                         break;
@@ -216,9 +207,10 @@ public class TheGamePanel extends javax.swing.JPanel {
                                         left = true;
                                         break;
                                 }
+                            }
                             side = theCell.getLeaved(true);
-                            if(side != null)
-                                switch(side){
+                            if (side != null) {
+                                switch (side) {
                                     case RIGHT:
                                         right = true;
                                         break;
@@ -226,9 +218,10 @@ public class TheGamePanel extends javax.swing.JPanel {
                                         left = true;
                                         break;
                                 }
+                            }
                             side = theCell.getEntered(false);
-                            if(side != null)
-                                switch(side){
+                            if (side != null) {
+                                switch (side) {
                                     case UP:
                                         up = true;
                                         break;
@@ -236,9 +229,10 @@ public class TheGamePanel extends javax.swing.JPanel {
                                         down = true;
                                         break;
                                 }
+                            }
                             side = theCell.getLeaved(false);
-                            if(side != null)
-                                switch(side){
+                            if (side != null) {
+                                switch (side) {
                                     case UP:
                                         up = true;
                                         break;
@@ -246,35 +240,38 @@ public class TheGamePanel extends javax.swing.JPanel {
                                         down = true;
                                         break;
                                 }
+                            }
                             mybuttons[k][l].setDrawUp(up, theCell.getColor(Cell.Side.UP));
                             mybuttons[k][l].setDrawDown(down, theCell.getColor(Cell.Side.DOWN));
                             mybuttons[k][l].setDrawRight(right, theCell.getColor(Cell.Side.RIGHT));
                             mybuttons[k][l].setDrawLeft(left, theCell.getColor(Cell.Side.LEFT));
-                        
+
                         }
                     }
                 }
             }
         });
-        
+
     }
 
-    
-
-    private int i, j, i0=-10, j0=-10;
+    private int i, j, i0 = -10, j0 = -10;
     private boolean ismousePressed;
     private boolean canAdd;
     private Color color;
-    
-    private GameControllar gc;
+
+    private final GameControllar gc;
     private CellPanel[][] mybuttons;
-    private Level level;
-    
+    private final Level level;
+
     private int moves;
     private boolean newMove;
     private PropertyChangeSupport changeSupport;
-    
-    public void addListener(PropertyChangeListener listener){
+
+    /**
+     * adding listener to this panel
+     * @param listener 
+     */
+    public void addListener(PropertyChangeListener listener) {
         if (listener == null) {
             return;
         }
@@ -319,14 +316,33 @@ public class TheGamePanel extends javax.swing.JPanel {
         }
 
     }
-    
-    public GameControllar getGameControllar(){
+
+    /**
+     * 
+     * @return the game controller
+     */
+    public GameControllar getGameControllar() {
         return gc;
     }
-    public void increaseMoves(){
+
+    /**
+     * add 1 to moves
+     */
+    public void increaseMoves() {
         changeSupport.firePropertyChange("moves", moves++, moves);
     }
-    public void decreaseMoves(){
+
+    /**
+     * remove 1 from moves
+     */
+    public void decreaseMoves() {
         changeSupport.firePropertyChange("moves", moves--, moves);
+    }
+
+    /**
+     * draw every thing all over again
+     */
+    public void updateDrawing() {
+        this.gc.updateUI();
     }
 }

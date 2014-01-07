@@ -11,14 +11,25 @@ import java.beans.PropertyChangeSupport;
  */
 public class GameControllar {
 
+    /* Attributs */
+    //<editor-fold defaultstate="collapsed" desc="Here the Private Attributs ">
     private Maze maze;
     private Maze maze2;
 
     private PropertyChangeSupport changeSupport;
 
+    /**
+     * tell the cell is full if it is zero
+     */
     private int unfilled;
     private int unfilled2;
 
+    //</editor-fold>
+    /**
+     * construct the game controller with level
+     *
+     * @param level
+     */
     public GameControllar(Level level) {
         maze = new Maze(level);
         maze2 = new Maze(maze);
@@ -31,6 +42,12 @@ public class GameControllar {
         }
         unfilled2 = unfilled;
     }
+
+    /**
+     * construct the game with maze
+     *
+     * @param newMaze
+     */
     public GameControllar(Maze newMaze) {
         maze = newMaze;
         maze2 = new Maze(maze);
@@ -41,9 +58,26 @@ public class GameControllar {
         if (newMaze.getLevel().getHall() != null) {
             unfilled -= 2;
         }
+        for (int i = 0; i < maze.getLength(); i++) {
+            for (int j = 0; j < maze.getLength(); j++) {
+                unfilled -= maze.getCellAt(i, j).getPipeCount();
+            }
+        }
         unfilled2 = unfilled;
     }
 
+    /**
+     * add pipe from the cell at <code>i0,j0</code> to the cell at
+     * <code>i,j</code>
+     *
+     * @param i
+     * @param j
+     * @param i0
+     * @param j0
+     * @return true if the adding is a success
+     * @throws IllegalArgumentException if the cells aren't next to each other
+     * vertically or horizontally
+     */
     public boolean add(int i, int j, int i0, int j0) {
         Cell.Side side = null;//for the cell to
         int n = 0;
@@ -100,7 +134,8 @@ public class GameControllar {
 
                 int toIsFromI = i;
                 int toIsFromJ = j;
-                switch (to.getEntered()) {
+                Cell.Side toSide = (!to.isCross() ? to.getEntered() : to.getEntered(side == Cell.Side.LEFT || side == Cell.Side.RIGHT)).Opposite();
+                switch (toSide.Opposite()) {
                     case UP:
                         toIsFromI--;
                         break;
@@ -114,16 +149,18 @@ public class GameControllar {
                         toIsFromJ--;
                         break;
                 }
-                if (to.isCross() && to.getEntered(side == Cell.Side.RIGHT || side == Cell.Side.LEFT) != null && !to.getColor(side).equals(color)) {
-                    removeLeaveLine(toIsFromI, toIsFromJ, side == Cell.Side.RIGHT || side == Cell.Side.LEFT);
-                } else if (!to.getColor(side).equals(color)) {
+                Cell toIsFrom = maze.getCellAt(toIsFromI, toIsFromJ);
+                if (toIsFrom.isCross() && to.getEntered(toSide == Cell.Side.RIGHT || toSide == Cell.Side.LEFT) != null && !to.getColor(toSide).equals(color)) {
+                    removeLeaveLine(toIsFromI, toIsFromJ, toSide == Cell.Side.RIGHT || toSide == Cell.Side.LEFT);
+                } else if (!to.getColor(toSide).equals(color)) {
                     removeLeaveLine(toIsFromI, toIsFromJ);
                 }
             }
         }
 
-        from.add(side.Opposite(), color);
-        unfilled--;
+        if (from.add(side.Opposite(), color)) {
+            unfilled--;
+        }
         if (!to.add(side, color)) {
             Cell.Side entered;
             if (!to.isCross()) {
@@ -149,19 +186,14 @@ public class GameControllar {
         return true;
     }
 
-    public void clearPath(int i, int j) {
-        Cell theCell = maze.getCellAt(i, j);
-        if (theCell.isHall() || (theCell.isEmpty() && !theCell.hasDot())) {
-            return;
-        }
-        if (theCell.isCross() && !theCell.isFull()) {
-            removeLeaveLine(i, j, theCell.getLeaved(true) == Cell.Side.RIGHT || theCell.getLeaved(true) == Cell.Side.LEFT);
-        } else if (theCell.hasDot()) {
-            removeLeaveLine(theCell.getDot().next.x, theCell.getDot().next.y);
-        }
-        removeLeaveLine(i, j);
-    }
-
+    /**
+     * this method should not be used with bridged cells or it will do nothing
+     * this method remove all pipes starting from the cell with the indexes      <code>i,j<\code> toward the leaving pipes keeping the pipe that enters 
+     * this cell
+     *
+     * @param i
+     * @param j
+     */
     public void removeLeaveLine(int i, int j) {
         Cell cell = this.maze.getCellAt(i, j);
         if (cell.isEmpty()) {
@@ -198,13 +230,13 @@ public class GameControllar {
             } else {
                 removeLeaveLine(i, j, leaveSide == Cell.Side.RIGHT || leaveSide == Cell.Side.LEFT);
             }
-        } else {
-            removeLeaveLine(i, j, true);
         }
     }
 
     /**
-     * used for cross cell
+     * used for bridge cell this method remove all pipes starting from the cell
+     * with the indexes      <code>i,j<\code> toward the leaving pipes keeping the pipe that enters 
+     * this cell
      *
      * @param i
      * @param j
@@ -247,6 +279,27 @@ public class GameControllar {
         }
     }
 
+    /**
+     * this method can be used with bridged cells if they are not full this
+     * method remove all pipes starting from the cell with the indexes      <code>i,j<\code> toward the leaving pipes keeping the pipe that enters 
+     * this cell
+     *
+     * @param i
+     * @param j
+     */
+    public void clearPath(int i, int j) {
+        Cell theCell = maze.getCellAt(i, j);
+        if (theCell.isHall() || (theCell.isEmpty() && !theCell.hasDot())) {
+            return;
+        }
+        if (theCell.isCross() && !theCell.isFull()) {
+            removeLeaveLine(i, j, theCell.getLeaved(true) == Cell.Side.RIGHT || theCell.getLeaved(true) == Cell.Side.LEFT);
+        } else if (theCell.hasDot()) {
+            removeLeaveLine(theCell.getDot().next.x, theCell.getDot().next.y);
+        }
+        removeLeaveLine(i, j);
+    }
+
     public void addPropertyChangeListner(PropertyChangeListener listener, int i, int j) {
         this.maze.getCellAt(i, j).addPropertyChangeListner(listener);
         this.maze2.getCellAt(i, j).addPropertyChangeListner(listener);
@@ -262,16 +315,31 @@ public class GameControllar {
         changeSupport.addPropertyChangeListener(listener);
     }
 
+    /**
+     *
+     * @return count of rows
+     */
     public int CellsPerRow() {
         return this.maze.getLength();
     }
 
+    /**
+     * save the state of the maze in other attributes
+     */
     public void saveState() {
         maze2 = new Maze(maze);
         unfilled2 = unfilled;
     }
 
-    public void undo() {
+    /**
+     * go back on step back
+     *
+     * @return if the undoing is done
+     */
+    public boolean undo() {
+        if (unfilled == unfilled2) {
+            return false;
+        }
         Maze tempMaze = maze;
         maze = maze2;
         maze2 = tempMaze;
@@ -279,10 +347,24 @@ public class GameControllar {
         unfilled = unfilled2;
         unfilled2 = tempI;
         changeSupport.firePropertyChange("MAZE", maze2, maze);
+        return true;
     }
-    
-    public void saveMaze(int gamenumber,String filename){
+
+    /**
+     * save the current maze in a file
+     *
+     * @param gamenumber unique number
+     * @param filename
+     */
+    public void saveMaze(int gamenumber, String filename) {
         this.maze.setGameNumber(gamenumber);
         GWriter.gameWriter(maze, filename);
+    }
+
+    /**
+     * fire the state of pipes in all cells
+     */
+    public void updateUI() {
+        maze.updateUI();
     }
 }

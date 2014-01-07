@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author jasam + wissam
  */
-public class Cell implements Serializable{
+public class Cell implements Serializable {
 
     public enum Side {
 
@@ -71,20 +71,38 @@ public class Cell implements Serializable{
      * if there is Cross this should represent the horizontal pipe color else
      * this is the pipe in this cell color
      */
-    private Color color;
+    private Color horizontalColor;
     /**
      * if there is Cross this should represent the vertical pipe color else this
      * should be null
      */
-    private Color crossColor;
+    private Color verticalColor;
 
     private Dot dot;
+
+    /**
+     * fire the state of the cell
+     */
+    private PropertyChangeSupport changeSupport;
 
     //</editor-fold>
     public Cell(boolean isHall, boolean isCross, Dot dot) {
         this(isHall, isCross, dot, false, false, false, false);
     }
 
+    /**
+     *
+     * @param isHall boolean tell whether the cell is a hall
+     * @param isCross boolean tell whether the cell contain bridge
+     * @param dot the dot that the cell should contain , can be null
+     * @param isUpBlocked boolean tell whether this side cannot be edited
+     * @param isDownBlocked boolean tell whether this side cannot be edited
+     * @param isRightBlocked boolean tell whether this side cannot be edited
+     * @param isLeftBlocked boolean tell whether this side cannot be edited
+     * @throws IllegalArgumentException if there is two of hall ,cross or dot
+     * @throws IllegalArgumentException if there is a bridge and one or more of
+     * the sides is blocked
+     */
     public Cell(boolean isHall, boolean isCross, Dot dot, boolean isUpBlocked, boolean isDownBlocked, boolean isRightBlocked, boolean isLeftBlocked) {
         this.isCross = isCross;
         this.dot = dot;
@@ -97,8 +115,8 @@ public class Cell implements Serializable{
             throw new IllegalArgumentException("there connot be a bridge with one of his side blocked");
         }
         if (this.hasDot()) {
-            this.color = dot.color;
-            this.crossColor = dot.color;
+            this.horizontalColor = dot.color;
+            this.verticalColor = dot.color;
         }
         if (isHall) {
             this.up = State.BLOCKED;
@@ -111,27 +129,47 @@ public class Cell implements Serializable{
             this.right = isRightBlocked ? State.BLOCKED : State.EMPTY;
             this.left = isLeftBlocked ? State.BLOCKED : State.EMPTY;
         }
+        pipeCount = 0;
     }
 
+    /**
+     *
+     * @param copy the cell we want to get a copy of it
+     * @throws IllegalArgumentException if the <code>copy<\code> is null
+     */
     public Cell(Cell copy) {
+        if (copy == null) {
+            throw new NullPointerException(" the copy cell is null");
+        }
         this.isCross = copy.isCross;
         this.changeSupport = copy.changeSupport;
-        this.color = copy.color != null ? new Color(copy.color.getRGB()) : null;
-        this.crossColor = copy.crossColor != null ? new Color(copy.crossColor.getRGB()) : null;
+        this.horizontalColor = copy.horizontalColor != null ? new Color(copy.horizontalColor.getRGB()) : null;
+        this.verticalColor = copy.verticalColor != null ? new Color(copy.verticalColor.getRGB()) : null;
         this.dot = copy.dot;
         this.down = copy.down;
         this.left = copy.left;
         this.right = copy.right;
         this.up = copy.up;
         if (changeSupport != null) {
-            changeSupport.firePropertyChange(up.toString(), this, up);
-            changeSupport.firePropertyChange(right.toString(), this, right);
-            changeSupport.firePropertyChange(left.toString(), this, left);
-            changeSupport.firePropertyChange(down.toString(), this, down);
+            changeSupport.firePropertyChange(up.toString(), this, up);//i know
+            changeSupport.firePropertyChange(right.toString(), this, right);//i know
+            changeSupport.firePropertyChange(left.toString(), this, left);//i know
+            changeSupport.firePropertyChange(down.toString(), this, down);//i know
         }
         this.pipeCount = copy.pipeCount;
     }
 
+    /**
+     * add a pipe at the side and a color
+     *
+     * @param side the side we want to add pipe to
+     * @param color the color of the pipe
+     * @return true if the adding is a success and false if the adding is not a
+     * success
+     *
+     * @throws NullPointerException is either one of the side or the color is
+     * null
+     */
     public boolean add(Side side, Color color) {
         if (side == null) {
             throw new NullPointerException("there should be a side to add to");
@@ -157,7 +195,7 @@ public class Cell implements Serializable{
                         up = State.CROSS_LEAVED;
                     } else {
                         up = State.CROSS_ENTERD;
-                        this.crossColor = color;
+                        this.verticalColor = color;
                     }
                 } else {
                     if (hasDot()) {
@@ -179,8 +217,8 @@ public class Cell implements Serializable{
                         up = State.LEAVED;
                     } else {
                         up = State.ENTERD;
-                        this.color = color;
-                        this.crossColor = color;
+                        this.horizontalColor = color;
+                        this.verticalColor = color;
                     }
                 }
                 newValue = up;
@@ -197,7 +235,7 @@ public class Cell implements Serializable{
                         down = State.CROSS_LEAVED;
                     } else {
                         down = State.CROSS_ENTERD;
-                        this.crossColor = color;
+                        this.verticalColor = color;
                     }
                 } else {
                     if (hasDot()) {
@@ -219,8 +257,8 @@ public class Cell implements Serializable{
                         down = State.LEAVED;
                     } else {
                         down = State.ENTERD;
-                        this.color = color;
-                        this.crossColor = color;
+                        this.horizontalColor = color;
+                        this.verticalColor = color;
                     }
                 }
                 newValue = down;
@@ -231,13 +269,13 @@ public class Cell implements Serializable{
                     return false;
                 } else if (isCross) {
                     if (left == State.CROSS_ENTERD) {
-                        if (!getColor(false).equals(color)) {
+                        if (!getColor(true).equals(color)) {
                             return false;
                         }
                         right = State.CROSS_LEAVED;
                     } else {
                         right = State.CROSS_ENTERD;
-                        this.color = color;
+                        this.horizontalColor = color;
                     }
                 } else {
                     if (hasDot()) {
@@ -253,14 +291,14 @@ public class Cell implements Serializable{
                     } else if (down == State.ENTERD
                             || up == State.ENTERD
                             || left == State.ENTERD) {
-                        if (!getColor(false).equals(color)) {
+                        if (!getColor(true).equals(color)) {
                             return false;
                         }
                         right = State.LEAVED;
                     } else {
                         right = State.ENTERD;
-                        this.color = color;
-                        this.crossColor = color;
+                        this.horizontalColor = color;
+                        this.verticalColor = color;
                     }
                 }
                 newValue = right;
@@ -271,13 +309,13 @@ public class Cell implements Serializable{
                     return false;
                 } else if (isCross) {
                     if (right == State.CROSS_ENTERD) {
-                        if (!getColor(false).equals(color)) {
+                        if (!getColor(true).equals(color)) {
                             return false;
                         }
                         left = State.CROSS_LEAVED;
                     } else {
                         left = State.CROSS_ENTERD;
-                        this.color = color;
+                        this.horizontalColor = color;
                     }
                 } else {
                     if (hasDot()) {
@@ -293,14 +331,14 @@ public class Cell implements Serializable{
                     } else if (down == State.ENTERD
                             || right == State.ENTERD
                             || up == State.ENTERD) {
-                        if (!getColor(false).equals(color)) {
+                        if (!getColor(true).equals(color)) {
                             return false;
                         }
                         left = State.LEAVED;
                     } else {
                         left = State.ENTERD;
-                        this.color = color;
-                        this.crossColor = color;
+                        this.horizontalColor = color;
+                        this.verticalColor = color;
                     }
                 }
                 newValue = left;
@@ -314,6 +352,13 @@ public class Cell implements Serializable{
         return true;
     }
 
+    /**
+     * remove the pipe at side
+     *
+     * @param side the side we want to remove the pipe from
+     * @return true if the removing is a success and false if else
+     * @throws NullPointerException if the <code>side<\code> is null
+     */
     public boolean remove(Side side) {
         if (side == null) {
             throw new NullPointerException("there should be a side to add to");
@@ -369,13 +414,26 @@ public class Cell implements Serializable{
         if (hasDot()) {
             dot.isStart = false;
         }
-        if (isEmpty() && !hasDot()) {
-            this.color = this.crossColor = null;
+        if (isEmpty() && !hasDot() && !isCross) {
+            this.horizontalColor = this.verticalColor = null;
+        } else if (isCross) {
+            if (emptyLine(true)) {
+                horizontalColor = null;
+            } else if (emptyLine(false)) {
+                verticalColor = null;
+            }
         }
+
         changeSupport.firePropertyChange(side.toString(), this, newValue);
         return true;
     }
 
+    /**
+     * this method should be used only with none bridged cells
+     *
+     * @return the side of the entering pipe and if there isn't any returns null
+     * @throws InternalError if the cell is a bridge
+     */
     public Side getEntered() {
         if (isCross) {
             throw new InternalError("connot use with cell with bridge");
@@ -393,6 +451,12 @@ public class Cell implements Serializable{
         }
     }
 
+    /**
+     * this method should be used only with none bridged cells
+     *
+     * @return the side of the leaving pipe and if there isn't any returns null
+     * @throws InternalError if the cell is a bridge
+     */
     public Side getLeaved() {
         if (isCross) {
             throw new InternalError("connot use with cell with bridge");
@@ -410,8 +474,15 @@ public class Cell implements Serializable{
         }
     }
 
-    public Side getEntered(boolean Horizontal) {
-        if (Horizontal) {
+    /**
+     * this method can be used with any cell
+     *
+     * @param horizontal
+     * @return the side of the entering pipe depending on <code>horizontal<\code>
+     * and if there isn't any returns null
+     */
+    public Side getEntered(boolean horizontal) {
+        if (horizontal) {
             if (right == State.ENTERD
                     || right == State.CROSS_ENTERD) {
                 return Side.RIGHT;
@@ -431,8 +502,15 @@ public class Cell implements Serializable{
         return null;
     }
 
-    public Side getLeaved(boolean Horizontal) {
-        if (Horizontal) {
+    /**
+     * this method can be used with any cell
+     *
+     * @param horizontal
+     * @return the side of the leaving pipe depending on <code>horizontal<\code>
+     * and if there isn't any returns null
+     */
+    public Side getLeaved(boolean horizontal) {
+        if (horizontal) {
             if (right == State.LEAVED
                     || right == State.CROSS_LEAVED) {
                 return Side.RIGHT;
@@ -452,10 +530,18 @@ public class Cell implements Serializable{
         return null;
     }
 
+    /**
+     *
+     * @return true if the cell is a bridge
+     */
     public boolean isCross() {
         return isCross;
     }
 
+    /**
+     *
+     * @return true if the cell full of pipes
+     */
     public boolean isFull() {
         if (pipeCount < 0) {
             throw new InternalError("pipes count is negative");
@@ -469,6 +555,10 @@ public class Cell implements Serializable{
         return pipeCount == max;
     }
 
+    /**
+     *
+     * @return true if the cell has no pipes
+     */
     public boolean isEmpty() {
         return (up == State.EMPTY || up == State.BLOCKED)
                 && (down == State.EMPTY || down == State.BLOCKED)
@@ -476,25 +566,61 @@ public class Cell implements Serializable{
                 && (left == State.EMPTY || left == State.BLOCKED);
     }
 
+    /**
+     *
+     * @param horizontal
+     * @return true if the line which depend on <code>horizontal<\code> is empty
+     */
+    public boolean emptyLine(boolean horizontal) {
+        if (isCross) {
+            if (!horizontal) {
+                return (up == State.EMPTY || up == State.BLOCKED)
+                        && (down == State.EMPTY || down == State.BLOCKED);
+            } else {
+                return (right == State.EMPTY || right == State.BLOCKED)
+                        && (left == State.EMPTY || left == State.BLOCKED);
+            }
+        } else {
+            return isEmpty();
+        }
+    }
+
+    /**
+     *
+     * @param side
+     * @return the color of the pipe at the side or the opposite side of <code>side<\code>
+     */
     public Color getColor(Side side) {
         switch (side) {
             case LEFT:
             case RIGHT:
-                return color;
+                return horizontalColor;
             case UP:
             case DOWN:
-                return crossColor;
+                return verticalColor;
             default:
                 return null;
         }
     }
 
-    public Color getColor(boolean horizental) {
-        return horizental ? color : crossColor;
+    /**
+     *
+     * @param horizontal
+     * @return the color of the pipe depending on <code>horizontal<\code>
+     */
+    public Color getColor(boolean horizontal) {
+        return horizontal ? horizontalColor : verticalColor;
     }
 
-    private PropertyChangeSupport changeSupport;
-
+    /**
+     * Add a PropertyChangeListener to the listener list. The listener is
+     * registered for all properties. The same listener object may be added more
+     * than once, and will be called as many times as it is added. If
+     * <code>listener</code> is null, no exception is thrown and no action is
+     * taken.
+     *
+     * @param listener The PropertyChangeListener to be added
+     */
     public void addPropertyChangeListner(PropertyChangeListener listener) {
         if (listener == null) {
             return;
@@ -505,15 +631,45 @@ public class Cell implements Serializable{
         changeSupport.addPropertyChangeListener(listener);
     }
 
+    /**
+     *
+     * @return whether this cell has a dot or not
+     */
     public final boolean hasDot() {
         return this.dot != null;
     }
 
+    /**
+     *
+     * @return the dot of this cell and can return null if the cell has no dot
+     */
     public Dot getDot() {
         return dot;
     }
 
+    /**
+     *
+     * @return whether this cell is a hall or not
+     */
     public boolean isHall() {
         return up == State.BLOCKED && down == State.BLOCKED && right == State.BLOCKED && left == State.BLOCKED;
+    }
+
+    /**
+     * fire the state of pipes at this cell
+     */
+    public void updateUI() {
+        changeSupport.firePropertyChange("UP", this, up);
+        changeSupport.firePropertyChange("Down", this, down);
+        changeSupport.firePropertyChange("RIGHT", this, right);
+        changeSupport.firePropertyChange("LEFT", this, left);
+    }
+
+    /**
+     *
+     * @return the number of pipes in this cell
+     */
+    public int getPipeCount() {
+        return pipeCount;
     }
 }

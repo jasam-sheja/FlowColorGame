@@ -1,26 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Componants;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import Main.*;
 
 /**
  *
@@ -35,10 +20,12 @@ public class TheBuilderPanel extends javax.swing.JPanel {
         return mybuttons;
     }
 
-    private int levelLeangth;
+    private final int levelLeangth;
 
     /**
      * Creates new form TheBuilderPanel
+     *
+     * @param levelLeangth
      */
     public TheBuilderPanel(int levelLeangth) {
         this.levelLeangth = levelLeangth;
@@ -58,12 +45,12 @@ public class TheBuilderPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -87,7 +74,7 @@ public class TheBuilderPanel extends javax.swing.JPanel {
                 }
                 );
             }
-        };
+        }
 
     }
 
@@ -142,7 +129,6 @@ class myCellPanelListener extends MouseAdapter {
 
 }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
+// End of variables declaration//GEN-END:variables
 

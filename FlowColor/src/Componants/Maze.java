@@ -7,13 +7,13 @@ import java.util.Arrays;
  *
  * @author jasam + wissam
  */
-public class Maze implements Serializable{
+public class Maze implements Serializable {
 
-    private static  int counter = 0 ;
+    private static int counter = 0;
     private final Cell[][] maze;
     private Level level;
     private final int lenght;
-    private int gameNumber ;
+    private int gameNumber;
 
     public int getGameNumber() {
         return gameNumber;
@@ -22,7 +22,6 @@ public class Maze implements Serializable{
     public void setGameNumber(int gameNumber) {
         this.gameNumber = gameNumber;
     }
-    
 
     public Maze(Level level) {
         Dot[] dots = level.getDots();
@@ -67,15 +66,23 @@ public class Maze implements Serializable{
     public Level getLevel() {
         return level;
     }
-    
-    public Maze(Maze copy){
+
+    public Maze(Maze copy) {
         this.lenght = copy.lenght;
         this.gameNumber = copy.gameNumber;
         this.maze = new Cell[copy.lenght][copy.lenght];
         for (int i = 0; i < copy.lenght; i++) {
             for (int j = 0; j < copy.lenght; j++) {
                 maze[i][j] = new Cell(copy.maze[i][j]);
-            }            
+            }
+        }
+    }
+
+    public void updateUI() {
+        for (Cell[] cells : maze) {
+            for (Cell cell : cells) {
+                cell.updateUI();
+            }
         }
     }
 }
