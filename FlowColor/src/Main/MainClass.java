@@ -214,7 +214,7 @@ public class MainClass extends JFrame {
             public void run() {
                 try{
                     int n = Integer.parseInt(JOptionPane.showInputDialog("enter game difficult"));
-                    new MainClass(GReader.levelsReader(n, "LevelTest.bin")).setVisible(true);
+                    new MainClass(GReader.levelsReader(n, "LevelFile.bin")).setVisible(true);
                 }catch(NumberFormatException e){
                     System.exit(ABORT);
                 }                

@@ -28,7 +28,15 @@ public class Dot implements Serializable{
         this.next = new Dot(color2, x2, y2);
         this.next.next = this;
     }
+    
+    public void connectDots(Dot dot)
+    {
+            this.next = dot ;
+            this.next.next = this ;
+    }
 }
+
+
 
 class DotCompByPosition implements Comparator<Dot>{
 

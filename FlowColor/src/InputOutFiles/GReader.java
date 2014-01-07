@@ -20,16 +20,20 @@ public class GReader {
     
     public static Level levelsReader (int levelNumber, String fileName){
         Level level ;
-        ObjectInputStream readObject ;
+        ObjectInputStream readObjectS ;
         try{        
-         readObject = new ObjectInputStream(new FileInputStream(fileName)) ;
+         readObjectS = new ObjectInputStream(new FileInputStream(fileName)) ;
         while (true){
-            level = (Level) readObject.readObject() ;
-            if ((level == null)||(level.getLevelNumber() == levelNumber))
-                break ;
+            level = (Level) readObjectS.readObject() ;
+            if (level==null)
+            System.out.println(level.getLevelNumber());
             
+            if ((level == null)||(level.getLevelNumber() == levelNumber)){
+                break ;
+            }           
         }
-        readObject.close();
+        readObjectS.close();
+        
         return level ;
         
         }
@@ -73,4 +77,29 @@ public class GReader {
         
     }
     
+    public static int levelsReader (String fileName){
+        Level level ;
+        ObjectInputStream readObjectS ;
+        try{        
+         readObjectS = new ObjectInputStream(new FileInputStream(fileName)) ;
+         int number = (int) readObjectS.readObject() ;
+        readObjectS.close();
+        
+        return number ;
+        
+        }
+        catch (ClassNotFoundException ex){
+            System.err.println(ex.getMessage());
+            return  1 ;
+            
+        }
+        catch(IOException ex){
+            System.err.println(ex.getMessage());
+            return 1 ;
+            
+        }
+        
+        
+        
+    }
 }

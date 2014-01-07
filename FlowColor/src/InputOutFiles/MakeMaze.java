@@ -41,7 +41,7 @@ public class MakeMaze {
         MakeMaze maze = new MakeMaze() ;
         Level level = maze.buildLevel() ;
         GWriter.levelsWriter(level, "LevelTest.bin");
-        Level levelt = GReader.levelsReader(1, "LevelTest.bin");
+        Level levelt = GReader.levelsReader(2, "LevelTest.bin");
         System.out.println(levelt.getLength()); 
         System.out.println(levelt.getLevelNumber());
         

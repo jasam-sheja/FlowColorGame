@@ -391,7 +391,15 @@ public class CellPanel extends javax.swing.JPanel {
     private boolean drawLeft;
 
     //componants to drow
-    private final boolean drawDot;
+    private boolean drawDot;
+
+    public boolean isDrawDot() {
+        return drawDot;
+    }
+
+    public void setDrawDot(boolean drawDot) {
+        this.drawDot = drawDot;
+    }
     private final boolean drawBridge;
     private final boolean drawHall;
 
