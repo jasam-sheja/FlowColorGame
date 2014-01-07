@@ -43,6 +43,7 @@ public class LevelBuilder extends javax.swing.JFrame {
     private JButton build;
     private JButton hole;
     private JButton bridge;
+    private JButton remover ;
     static private JColorChooser colorChooser;
     private JPanel colorGUI;
     private static int level;
@@ -50,6 +51,7 @@ public class LevelBuilder extends javax.swing.JFrame {
     private int levelNumber = 0;
     private boolean holePrased ;
     private boolean bridgePrased ;
+    
     
     
     
@@ -88,14 +90,17 @@ public class LevelBuilder extends javax.swing.JFrame {
         this.setTitle("GameBuilder");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(300, 360);
+        this.setSize(300, 400);
         this.setResizable(false);
         this.add(panel, BorderLayout.CENTER);
         JPanel southPanel = new JPanel(true);
+        JPanel northPanel =  new JPanel(true);
         southPanel.add(color);
-        southPanel.add(build);
+        northPanel.add(build);
         southPanel.add(hole);
+        northPanel.add(remover) ;
         southPanel.add(bridge);
+        this.add(northPanel, BorderLayout.NORTH) ;
         this.add(southPanel, BorderLayout.SOUTH);
 //        JPanel eastPanel =  new JPanel(true) ;
 //        eastPanel.add(hole) ;
@@ -117,29 +122,30 @@ public class LevelBuilder extends javax.swing.JFrame {
                     Color colors;
                     mybuttons = (CellPanel[][]) evt.getOldValue();
                     colors = colorChooser.getColor();
-                    if ((holePrased)&&(!butten.isDrawDot())&&(!butten.isDrawBridge())){
+                   if ((!hole.isEnabled())&&(!butten.isDrawDot())&&(!butten.isDrawBridge())){
                         if (butten.isDrawHall()){
                             butten.setDrawHall(false);
                             hole.setEnabled(true);
-                            holePrased = true ;
                             holePrased = false ;
                         }
-                        else{
+                        else if (holePrased){
                             butten.setDrawHall(true);
-                            holePrased = true ;
+                            hole.setEnabled(false);
+                            holePrased = false ;
                         }
-                        
-                        
                     }
-                    else if((bridgePrased)&&(!butten.isDrawDot())&&(!butten.isDrawHall())){
+                    else if((!bridge.isEnabled())&&(!butten.isDrawDot())&&(!butten.isDrawHall())){
                         if (butten.isDrawBridge()){
                             butten.setDrawBridge(false);
                             bridge.setEnabled(true);
-                             bridgePrased = false ;
+                            bridgePrased = false ;
+                            
+                           
                         }
-                        else{
+                        else if (bridgePrased){
                             butten.setDrawBridge(true);
-                            bridgePrased = true ;
+                            bridge.setEnabled(false);
+                            bridgePrased = false ;
                         }
                         
                         
@@ -274,6 +280,15 @@ public class LevelBuilder extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 bridgePrased =  true ;
                 bridge.setEnabled(false);
+            }
+        });
+        remover =  new JButton("Remove") ;
+        remover.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int levelo = Integer.parseInt(JOptionPane.showInputDialog("plz enter the level"));
+                GWriter.levelsRemover(levelo, "LevelFile.bin");
             }
         });
 

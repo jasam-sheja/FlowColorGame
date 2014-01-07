@@ -41,5 +41,19 @@ public class Level implements Serializable {
     public int getLevelNumber() {
         return levelNumber;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Level other = (Level) obj;
+        if (this.levelNumber != other.levelNumber) {
+            return false;
+        }
+        return true;
+    }
 
 }

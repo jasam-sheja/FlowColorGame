@@ -7,8 +7,10 @@ package InputOutFiles;
 
 import Componants.Level;
 import Componants.Maze;
+import static java.awt.image.ImageObserver.ABORT;
 import java.io.*;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,6 +40,35 @@ public class GWriter {
         }
 
     }
+    public static void levelsRemover(int levelnumber, String fileName) {
+
+        ObjectOutputStream writeObject;
+        try {
+            Level level=null ;
+            ArrayList<Level> levels = new ArrayList<Level>();
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            } else {
+                level = GReader.levelReader(levelnumber, fileName) ;
+            }
+            if (level==null){
+                JOptionPane.showMessageDialog(null, "sry no such level");
+                 System.exit(ABORT);
+            }
+                
+            writeObject = new ObjectOutputStream(new FileOutputStream(file));
+            levels.remove(level);
+            writeObject.writeObject(levels);
+            writeObject.flush();
+            writeObject.close();
+
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+    }
+
 
     public static void gameWriter(Maze maze, String fileName) {
 
